@@ -22,7 +22,9 @@ In the top menu you can have access to the Playfab config panel and a shortcut t
 
 ![](https://github.com/PlayFab/UnityPlayFab_AngryBots/blob/master/_repo_images/PlayfabMenu.png)
 
-Change the TitleId for your own TitleId in the Config panel if you like to create your own items or change the loaded content from the developer dashboard on developer.playfab.com. You can add prefabs directly from the same panel to your current scene.
+ * Change the TitleId for your own TitleId in the Config panel if you like to create your own items or change the loaded content from the developer dashboard on developer.playfab.com. 
+ * You can add prefabs directly from the same panel to your current scene.
+ * If you like to start in a scene and use PLayfab services without having to login or register check the Keep session key and save the configuration after you have logged in. Your session key should be shown in red before you click save. 
 
 ![](https://github.com/PlayFab/UnityPlayFab_AngryBots/blob/master/_repo_images/PlayFabConfig.png)
 
