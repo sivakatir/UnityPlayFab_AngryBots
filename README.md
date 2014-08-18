@@ -19,10 +19,17 @@ Open your File->Build Settings and Drag&Drop the scenes found in your project As
 
 ###### Configuring Playfab and playing arround.
 In the top menu you can have access to the Playfab config panel and a shortcut to your Playfab developer panel.
+
 ![](https://github.com/PlayFab/UnityPlayFab_AngryBots/blob/master/_repo_images/PlayfabMenu.png)
+
 Change the TitleId for your own TitleId in the Config panel if you like to create your own items or change the loaded content from the developer dashboard on developer.playfab.com. You can also create a new scene and add prefabs directly from the same panel.
+
 ![](https://github.com/PlayFab/UnityPlayFab_AngryBots/blob/master/_repo_images/PlayFabConfig.png)
+
 You can edit the Playfab prefabs directly from your project in Assets/Playfab/Prefabs
+
 ![](https://github.com/PlayFab/UnityPlayFab_AngryBots/blob/master/_repo_images/Prefabs.png)
+
 In example, here's some of the value that you can change from the Register prefab.
+
 ![](https://github.com/PlayFab/UnityPlayFab_AngryBots/blob/master/_repo_images/PrefabRegister.png)
