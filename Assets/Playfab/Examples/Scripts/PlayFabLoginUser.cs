@@ -13,17 +13,23 @@ namespace PlayFab.Examples{
 		public string nextScene = "PF_PurchaseScene";
 		public string previousScene = "PF_UserRegisterScene";
 		public Texture2D playfabBackground;
+		public string accountNotFound = "That account could not be found.";
+		public string accountBanned = "That account has been banned.";
+		public string invalidPassword = "Password is invalid (6-24 characters).";
+		public string invalidUsername = "Username is invalid (3-24 characters).";
+		public string wrongPassword = "Wrong password for that user.";
 
-		private string passwordValidLabel = "";
-		private string errorStackLabel = "";
+		private string errorLabel = "";
+		private GUIStyle errorLabelStyle = new GUIStyle();
+
 		private string userNameField = "";
 		private string passwordField = "";
-		private GUIStyle passwordValidLabelStyle = new GUIStyle();
 		private float yStart;
 		private bool isPassword = true;
+		private bool returnedError = false;
 
 		private void Start (){
-			passwordValidLabelStyle.normal.textColor = Color.red;
+			errorLabelStyle.normal.textColor = Color.red;
 		}
 
 		void OnGUI () {
@@ -34,22 +40,26 @@ namespace PlayFab.Examples{
 				yStart = winRect.y + 80;
 				GUI.DrawTexture (winRect, playfabBackground);
 
-				passwordValidLabel = isPassword ? "" : "Password is not valid";
+				if (!isPassword) {
+					errorLabel = invalidPassword;
+				}
+				else if (!returnedError) {
+					errorLabel = "";
+				}
 
 				GUI.Label (new Rect (winRect.x + 18, yStart -16, 120, 30), "<size=18>"+title+"</size>");
 				GUI.Label (new Rect (winRect.x + 18, yStart+25, 120, 20), userNameLabel);
 				GUI.Label (new Rect (winRect.x + 18, yStart+50, 120, 20), passwordLabel);
-				GUI.Label (new Rect (winRect.x + 18, yStart+73, 120, 20), passwordValidLabel, passwordValidLabelStyle);
+				GUI.Label (new Rect (winRect.x + 18, yStart+73, 120, 20), errorLabel, errorLabelStyle);
 				GUI.Label (new Rect (winRect.x +18, yStart +145, 120, 20), "OR");
 						
 				userNameField = GUI.TextField (new Rect (winRect.x+130, yStart+25, 100, 20), userNameField);
 				passwordField = GUI.PasswordField  (new Rect (winRect.x+130, yStart+50, 100, 20), passwordField,"*"[0], 20);
 
-				if(errorStackLabel.Length>0)errorStackLabel = GUI.TextArea (new Rect (winRect.x+125, yStart+125, 200, 100), errorStackLabel, 200);
-
 				if (GUI.Button (new Rect (winRect.x+18, yStart+100, 100, 30), "Login")||Event.current.Equals(Event.KeyboardEvent("[enter]"))) {
 					if(userNameField.Length>0 && passwordField.Length>0)
 					{
+						returnedError = false;
 						LoginWithPlayFabRequest request = new LoginWithPlayFabRequest();
 						request.Username = userNameField;
 						request.Password = passwordField;
@@ -70,7 +80,6 @@ namespace PlayFab.Examples{
 			}
 		}
 		public void OnLoginResult(LoginResult result){
-			errorStackLabel ="";
 			PlayFabGameBridge.gameState = 3;
 			if(PlayFabData.AngryBotsModActivated)Application.LoadLevel ("Default");
 			else Application.LoadLevel (nextScene);
@@ -78,7 +87,32 @@ namespace PlayFab.Examples{
 		}
 		void OnPlayFabError(PlayFabError error)
 		{
-			Debug.Log ("Got an error: " + error.ErrorMessage);
+			returnedError = true;
+			Debug.Log ("Got an error: " + error.Error);
+			if (error.Error == PlayFabErrorCode.InvalidParams && error.ErrorDetails.ContainsKey("Password"))
+			{
+				errorLabel = invalidPassword;
+			}
+			else if (error.Error == PlayFabErrorCode.InvalidParams && error.ErrorDetails.ContainsKey("Username"))
+			{
+				errorLabel = invalidUsername;
+			}
+			else if (error.Error == PlayFabErrorCode.AccountNotFound)
+			{
+				errorLabel = accountNotFound;
+			}
+			else if (error.Error == PlayFabErrorCode.AccountBanned)
+			{
+				errorLabel = accountBanned;
+			}
+			else if (error.Error == PlayFabErrorCode.InvalidUsernameOrPassword)
+			{
+				errorLabel = wrongPassword;
+			}
+			else
+			{
+				errorLabel = "Unknown Error.";
+			}
 		}
 
 
