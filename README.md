@@ -22,7 +22,7 @@ In the top menu you can have access to the Playfab config panel and a shortcut t
 
 ![](https://github.com/PlayFab/UnityPlayFab_AngryBots/blob/master/_repo_images/PlayfabMenu.png)
 
-Change the TitleId for your own TitleId in the Config panel if you like to create your own items or change the loaded content from the developer dashboard on developer.playfab.com. You can also create a new scene and add prefabs directly from the same panel.
+Change the TitleId for your own TitleId in the Config panel if you like to create your own items or change the loaded content from the developer dashboard on developer.playfab.com. You can add prefabs directly from the same panel to your current scene.
 
 ![](https://github.com/PlayFab/UnityPlayFab_AngryBots/blob/master/_repo_images/PlayFabConfig.png)
 
