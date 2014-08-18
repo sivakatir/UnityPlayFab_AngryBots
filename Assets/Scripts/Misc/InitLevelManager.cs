@@ -17,7 +17,7 @@ public class InitLevelManager : MonoBehaviour
 		background.Apply ();
 		
 		DontDestroyOnLoad (gameObject);
-		Application.LoadLevel (Application.loadedLevel + 1);
+		Application.LoadLevel ("AngryBots");
 	}
 	
 	

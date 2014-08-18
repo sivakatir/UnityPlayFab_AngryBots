@@ -11,7 +11,7 @@ public class PlayFabGameBridge : MonoBehaviour{
 	public static int kills = 0;
 	public static uint money = 0;
 	public static int currentGun = 1;
-	public static uint gameState = 1; // Can be used for game progress
+	public static uint gameState = 2; // Can be used for game progress
 
 	// Used to know when to stop the game when Menus are open. This is custom to any game UX.
 	public static bool menuClosed = true;

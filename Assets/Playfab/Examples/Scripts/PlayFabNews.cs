@@ -24,7 +24,7 @@ namespace PlayFab.Examples{
 		// Use this for initialization
 		void Start () {
 			GetTitleNewsRequest request = new GetTitleNewsRequest ();
-			request.Keys = Convert.ToUInt32(newsToLoad);
+			request.Count = Convert.ToInt32(newsToLoad);
 			PlayFabClientAPI.GetTitleNews (request, OnNewsResult, OnPlayFabError);
 		}
 
