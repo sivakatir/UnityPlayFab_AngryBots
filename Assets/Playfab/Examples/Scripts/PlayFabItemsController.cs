@@ -27,8 +27,12 @@ public class PlayFabItemsController : SingletonMonoBehaviour<PlayFabItemsControl
 		PlayFabGameBridge.consumableItemsConsumed = new Dictionary<string,uint?>(); 
 		for (int i = 0; i<Inventory.Count; i++) {
 			if (Inventory [i].RemainingUses != null) {
-				if(PlayFabGameBridge.consumableItems.ContainsKey(Inventory[i].ItemId))PlayFabGameBridge.consumableItems[Inventory[i].ItemId] += Inventory[i].RemainingUses;
-					else{
+				if (PlayFabGameBridge.consumableItems.ContainsKey(Inventory[i].ItemId))
+				{
+					PlayFabGameBridge.consumableItems[Inventory[i].ItemId] += Inventory[i].RemainingUses;
+				}
+				else
+				{
 					PlayFabGameBridge.consumableItems.Add(Inventory[i].ItemId,Inventory[i].RemainingUses);
 					PlayFabGameBridge.consumableItemsConsumed.Add(Inventory[i].ItemId,0);
 				}
@@ -42,9 +46,15 @@ public class PlayFabItemsController : SingletonMonoBehaviour<PlayFabItemsControl
 	}
 
 	public static void ConsumeItems(){
-		foreach(KeyValuePair<string, uint?> entry in PlayFabGameBridge.consumableItemsConsumed)
+		var buffer = new List<string>(PlayFabGameBridge.consumableItemsConsumed.Keys);	// needed because we cannot otherwise change a dictionary while we iterate over it
+
+		foreach(string item in buffer)
 		{
-			if(PlayFabGameBridge.consumableItemsConsumed[entry.Key]!= 0) PlayFabItemsController.instance.ConsumeCalculator (entry.Key,PlayFabGameBridge.consumableItemsConsumed[entry.Key]);
+			if (PlayFabGameBridge.consumableItemsConsumed[item]!= 0)
+			{
+				PlayFabItemsController.instance.ConsumeCalculator (item, PlayFabGameBridge.consumableItemsConsumed[item]);
+				PlayFabGameBridge.recordConsumed(item);
+			}
 		}
 	}
 
@@ -56,11 +66,13 @@ public class PlayFabItemsController : SingletonMonoBehaviour<PlayFabItemsControl
 					if(toConsume>=Inventory[i].RemainingUses){
 						toConsume -= Inventory[i].RemainingUses;
 						request.ConsumeCount = Convert.ToInt32(Inventory[i].RemainingUses);
-						Inventory[i].RemainingUses = 0;
+						Inventory[i].RemainingUses = 0;	// really we should only do this in onConsumeCompleted in case there is an error
 					}else{
-						Inventory[i].RemainingUses -= toConsume;
+						Inventory[i].RemainingUses -= toConsume; // here too
 						request.ConsumeCount = Convert.ToInt32(toConsume);
+						toConsume = 0;
 					}
+					Debug.Log ("Consuming " + toConsume + " of " + request.ItemInstanceId);
 					PlayFabClientAPI.ConsumeItem(request,onConsumeCompleted,OnPlayFabError);
 					if(toConsume==0)break;
 				}

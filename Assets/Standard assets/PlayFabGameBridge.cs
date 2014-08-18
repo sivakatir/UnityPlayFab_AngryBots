@@ -23,4 +23,11 @@ public class PlayFabGameBridge : MonoBehaviour{
 			consumableItems[str] -= 1;
 			consumableItemsConsumed[str] += 1;
 	}
+	public static void consumeItem(string str,uint? count){
+		consumableItems[str] -= count;
+		consumableItemsConsumed[str] += count;
+	}
+	public static void recordConsumed(string str){
+		consumableItemsConsumed[str] = 0;
+	}
 }

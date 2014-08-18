@@ -7,7 +7,7 @@ public class PlayFabInventoryMenu : PlayFabItemsController {
 	public Texture2D item1,item2,item3,item1Selected,item2Selected,item3Selected;
 	public int spaceInBetween;
 	public bool autoUpdateConsumeItems = true;
-	public int UpdateEverySeconds = 10;
+	public int UpdateEverySeconds = 15;
 
 	private List<Texture2D>itemTextures;
 	private List<Texture2D>itemSelectedTextures;
