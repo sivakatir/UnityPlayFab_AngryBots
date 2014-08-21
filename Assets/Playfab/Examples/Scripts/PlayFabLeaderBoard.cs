@@ -79,7 +79,8 @@ namespace PlayFab.Examples{
 					foreach (KeyValuePair<string, uint> PlayerScore in LeaderboardHighScores){
 						GUI.Box (new Rect (10 , 25*inc, winRect.width - 35, 20),"");
 						GUI.skin.label.alignment = TextAnchor.MiddleLeft;
-						GUI.Label (new Rect (10+2, 25*inc, winRect.width - 43, 20), "<size=12>"+PlayerScore.Key+"</size>");
+						GUI.Label (new Rect (10+2, 25*inc, winRect.width - 43, 20), "<size=12>"+(inc+1)+"</size>");
+						GUI.Label (new Rect (10+20, 25*inc, winRect.width - 43, 20), "<size=12>"+PlayerScore.Key+"</size>");
 						GUI.skin.label.alignment = TextAnchor.MiddleRight;
 						GUI.Label (new Rect (10+2, 25*inc, winRect.width - 43, 20), "<size=12>"+PlayerScore.Value+"</size>");
 						inc++;
