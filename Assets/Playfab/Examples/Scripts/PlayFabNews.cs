@@ -44,13 +44,15 @@ namespace PlayFab.Examples{
 				Rect newsIconRect = new Rect (Screen.width-iconSpace -newsButton.width,0+iconSpace,newsButton.width,newsButton.height );
 				if (GUI.Button (newsIconRect, newsButton,GUIStyle.none)) {
 					showNews = !showNews;
+					Time.timeScale = !showNews ? 1.0f : 0.0f;
 				};
+				Rect winRect = new Rect (Screen.width * 0.5f - newsBackground.width *0.5f,100,newsBackground.width,newsBackground.height );
 				if (showNews) {
-					Rect winRect = new Rect (Screen.width * 0.5f - newsBackground.width *0.5f,100,newsBackground.width,newsBackground.height );
 					GUI.DrawTexture (winRect, newsBackground);
 					Rect closeRect = new Rect (winRect.x+newsBackground.width-close.width,winRect.y,close.width,close.height );
 					if (GUI.Button (closeRect, close,GUIStyle.none)) {
 						showNews = false;
+						Time.timeScale = !showNews ? 1.0f : 0.0f;
 					};
 					GUI.skin.label.alignment = TextAnchor.UpperLeft;
 					Rect prevRect = new Rect();
@@ -80,15 +82,15 @@ namespace PlayFab.Examples{
 						prevRect = labelRect;
 						prevRect.y += textSpace*2;
 					}
-					drawCursor = false;
-					if (Input.mousePosition.x < winRect.x + winRect.width && Input.mousePosition.x > winRect.x && Screen.height - Input.mousePosition.y < winRect.y + winRect.height && Screen.height - Input.mousePosition.y > winRect.y)
-						drawCursor = true;
-					if (drawCursor) {
-						Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,cursor.width,cursor.height );
-						GUI.DrawTexture (cursorRect, cursor);
-					}
-				};
-
+				}
+				drawCursor = false;
+				if (Input.mousePosition.x < winRect.x + winRect.width && Input.mousePosition.x > winRect.x && Screen.height - Input.mousePosition.y < winRect.y + winRect.height && Screen.height - Input.mousePosition.y > winRect.y)
+					drawCursor = true;
+				if (drawCursor) {
+					Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,cursor.width,cursor.height );
+					GUI.DrawTexture (cursorRect, cursor);
+					PlayFabGameBridge.mouseOverGui = true;
+				}
 			}
 		}
 	}

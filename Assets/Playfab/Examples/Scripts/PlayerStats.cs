@@ -19,7 +19,7 @@ public class PlayerStats : MonoBehaviour {
 			Rect killsRect = new Rect (winRect.x, winRect.y+healthRect.height+4, kills.width, kills.height);
 			GUI.DrawTexture (killsRect, kills);
 			
-			GUI.Label (new Rect (killsRect.x + killsRect.width + 4, killsRect.y+kills.height*0.5f, 80, 80), "<size=18>"+PlayFabGameBridge.kills+"</size>");
+			GUI.Label (new Rect (killsRect.x + killsRect.width + 4, killsRect.y+kills.height*0.5f, 80, 80), "<size=18>"+PlayFabGameBridge.totalKills+"</size>");
 			
 			Rect moneyRect = new Rect (winRect.x, killsRect.y+killsRect.height+4, kills.width, kills.height);
 			GUI.DrawTexture (moneyRect, money);

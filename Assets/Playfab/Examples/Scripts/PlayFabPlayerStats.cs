@@ -1,12 +1,54 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using PlayFab.Examples;
+using PlayFab;
+using PlayFab.ClientModels;
 
 
 public class PlayFabPlayerStats : MonoBehaviour {
 
 	public Texture2D health,kills,money,cursor;
 
+	private int totalKillsOld;
+
+	public void Start() {
+		GetUserDataRequest request = new GetUserDataRequest ();
+		PlayFabClientAPI.GetUserData (request, LoadPlayerData, OnPlayFabError);
+		InvokeRepeating("SavePlayerState", 10, 10);
+	}
+
+	private void LoadPlayerData(GetUserDataResult result)
+	{
+		Debug.Log ("Player data loaded.");
+		if (result.Data.ContainsKey ("TotalKills")) {
+			PlayFabGameBridge.totalKills = int.Parse(result.Data["TotalKills"].Value);
+		}
+		totalKillsOld = PlayFabGameBridge.totalKills;
+	}
+	
+	private void SavePlayerState()
+	{
+		if (PlayFabGameBridge.totalKills != totalKillsOld) {	// we need to save
+			Debug.Log ("Saving player data...");
+			UpdateUserDataRequest request = new UpdateUserDataRequest ();
+			request.Data = new Dictionary<string, string> ();
+			request.Data.Add ("TotalKills", PlayFabGameBridge.totalKills.ToString ());
+			PlayFabClientAPI.UpdateUserData (request, PlayerDataSaved, OnPlayFabError);
+		}
+		totalKillsOld = PlayFabGameBridge.totalKills;
+	}
+
+	private void PlayerDataSaved(UpdateUserDataResult result)
+	{
+		Debug.Log ("PLayer Data saved.");
+	}
+
+	public void onDestroy()
+	{
+		SavePlayerState ();
+	}
 
 	void OnGUI () {
 		if (PlayFabItemsController.InventoryLoaded) {
@@ -19,7 +61,7 @@ public class PlayFabPlayerStats : MonoBehaviour {
 			Rect killsRect = new Rect (winRect.x, winRect.y+healthRect.height+4, kills.width, kills.height);
 			GUI.DrawTexture (killsRect, kills);
 			
-			GUI.Label (new Rect (killsRect.x + killsRect.width + 4, killsRect.y+kills.height*0.5f, 80, 80), "<size=18>"+PlayFabGameBridge.kills+"</size>");
+			GUI.Label (new Rect (killsRect.x + killsRect.width + 4, killsRect.y+kills.height*0.5f, 80, 80), "<size=18>"+PlayFabGameBridge.totalKills+"</size>");
 			
 			Rect moneyRect = new Rect (winRect.x, killsRect.y+killsRect.height+4, kills.width, kills.height);
 			GUI.DrawTexture (moneyRect, money);
@@ -44,5 +86,10 @@ public class PlayFabPlayerStats : MonoBehaviour {
 		GUI.Label (new Rect (posX +100, posY, 200, 200), "<size=12>"+PlayFabTitleData.Data[iconText]+"</size>");
 
 
+	}
+
+	void OnPlayFabError(PlayFabError error)
+	{
+		Debug.Log ("Got an error: " + error.ErrorMessage);
 	}
 }

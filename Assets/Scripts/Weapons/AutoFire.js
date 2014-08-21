@@ -5,15 +5,11 @@
 var bulletPrefab : GameObject;
 var spawnPoint : Transform;
 var frequency : float = 10;
-var frequencyOri : float = frequency;
 var coneAngle : float = 1.5;
-var coneAngleOri : float = coneAngle;
 var firing : boolean = false;
 var damagePerSecond : float = 20.0;
-var damagePerSecondOri : float = damagePerSecond;
 var forcePerSecond : float = 20.0;
 var hitSoundVolume : float = 0.5;
-var hitSoundVolumeOri : float = hitSoundVolume;
 
 var muzzleFlashFront : GameObject;
 
@@ -27,29 +23,13 @@ function Awake () {
 	if (spawnPoint == null)
 		spawnPoint = transform;
 }
-private var gunsAmmoNames : Array = ["ammo_pack_1","ammo_pack_2"];
 function Update () {
 	if (firing) {
-		switch(PlayFabGameBridge.currentGun){
-		case 1: 
-			frequency = frequencyOri;
-			coneAngle = coneAngleOri;
-			damagePerSecond = damagePerSecondOri;
-			hitSoundVolume = hitSoundVolumeOri;
-		break;
-		case 2:
-			frequency = 20;
-			coneAngle = 5;
-			damagePerSecond = 80;
-			hitSoundVolume = 10;
-		break;
-		case 3:
-			frequency = 2;
-			coneAngle = 20;
-			damagePerSecond = 200;
-			hitSoundVolume = 5;
-		break;
-		}
+		frequency = PlayFabGameBridge.currentGun.Frequency;
+		coneAngle = PlayFabGameBridge.currentGun.ConeAngle;
+		damagePerSecond = PlayFabGameBridge.currentGun.DamagePerSecond;
+		hitSoundVolume = PlayFabGameBridge.currentGun.HitSoundVolume;
+
 		if (Time.time > lastFireTime + 1 / frequency) {
 			// Spawn visual bullet
 			var coneRandomRotation = Quaternion.Euler (Random.Range (-coneAngle, coneAngle), Random.Range (-coneAngle, coneAngle), 0);
@@ -83,30 +63,23 @@ function Update () {
 			}
 			else 
 				bullet.dist = 1000;
-			if(PlayFabGameBridge.currentGun!=1)PlayFabGameBridge.consumeItem(gunsAmmoNames[PlayFabGameBridge.currentGun-2] as String);
+			if(PlayFabGameBridge.currentGunName != "Default")
+				PlayFabGameBridge.consumeItem(PlayFabGameBridge.currentGunName);
 		}
 	}
+	PlayFabGameBridge.mouseOverGui = false;	// should be called right before we check	
 }
 var canShoot : boolean;
 function OnStartFire () {
-	canShoot = (PlayFabGameBridge.currentGun == 1 || PlayFabGameBridge.consumableItems.ContainsKey(gunsAmmoNames[PlayFabGameBridge.currentGun-2] as String));
-	if (Time.timeScale == 0 || !PlayFabGameBridge.menuClosed || !canShoot)
+	canShoot = (PlayFabGameBridge.currentGunName == "Default" || PlayFabGameBridge.consumableItems.ContainsKey(PlayFabGameBridge.currentGunName));
+	if (Time.timeScale == 0 || PlayFabGameBridge.mouseOverGui || !canShoot)
 		return;
 	muzzleFlashFront.SetActive (true);
 	if (audio){
-	
-		switch(PlayFabGameBridge.currentGun){
-			case 1:audio.pitch=1;
-			break;
-			case 2:audio.pitch=3;
-			break;
-			case 3:audio.pitch=0.2;
-			break;
-		}
+		audio.pitch = PlayFabGameBridge.currentGun.Pitch;
 		audio.Play ();
 	}
-	firing = true;
-		
+	firing = true;		
 }
 
 function OnStopFire () {

@@ -12,7 +12,7 @@ public class PlayFabInventoryMenu : PlayFabItemsController {
 	private List<Texture2D>itemTextures;
 	private List<Texture2D>itemSelectedTextures;
 	private Rect[] itemsRect = new Rect[4];
-	private int currentItemSelected = 1;
+	private int currentItemSelected = 0;
 	private int textureWidth = 1;
 	private int totalWidth = 1;
 
@@ -31,18 +31,15 @@ public class PlayFabInventoryMenu : PlayFabItemsController {
 
 			for (int i = 1; i<=itemTextures.Count; i++) {
 				itemsRect[i] = new Rect (itemsRect[i-1].x+spaceInBetween+itemTextures[0].width,Screen.height - itemTextures[0].height - 20,itemTextures[0].width, itemTextures[0].height);
-				if (currentItemSelected == i) {
+				if (currentItemSelected == i-1) {
 					itemsRect[i].y -= 10;
 					GUI.DrawTexture (itemsRect[i], itemSelectedTextures[i-1]);	
 				}
 				else GUI.DrawTexture (itemsRect[i], itemTextures[(i-1)]);
 				uint? num = 0;
-				if(i==2){
-					if (PlayFabGameBridge.consumableItems.ContainsKey("ammo_pack_1"))num = PlayFabGameBridge.consumableItems["ammo_pack_1"];
-					GUI.Label (new Rect (itemsRect[i].x, itemsRect[i].y-itemsRect[i].height+55, 80, 80), "<size=22>"+num+"</size>");
-				}
-				else if(i==3){
-					if (PlayFabGameBridge.consumableItems.ContainsKey("ammo_pack_2"))num = PlayFabGameBridge.consumableItems["ammo_pack_2"];
+				if (i > 1 && PlayFabGameBridge.consumableItems.ContainsKey(PlayFabGameBridge.gunNames[i-1])) // because item 1 has infinite ammo
+				{
+					num = PlayFabGameBridge.consumableItems[PlayFabGameBridge.gunNames[i-1]];
 					GUI.Label (new Rect (itemsRect[i].x, itemsRect[i].y-itemsRect[i].height+55, 80, 80), "<size=22>"+num+"</size>");
 				}
 			}
@@ -52,9 +49,15 @@ public class PlayFabInventoryMenu : PlayFabItemsController {
 		ConsumeItems ();
 	}
 	void Update(){
-		if (Input.GetKeyDown (KeyCode.Alpha1))currentItemSelected=1;
-		if (Input.GetKeyDown (KeyCode.Alpha2))currentItemSelected=2;
-		if (Input.GetKeyDown (KeyCode.Alpha3))currentItemSelected=3;
-		PlayFabGameBridge.currentGun = currentItemSelected;
-	}
+		var oldItem = currentItemSelected;
+
+		if (Input.GetKeyDown (KeyCode.Alpha1))currentItemSelected=0;
+		if (Input.GetKeyDown (KeyCode.Alpha2))currentItemSelected=1;
+		if (Input.GetKeyDown (KeyCode.Alpha3))currentItemSelected=2;
+
+		if (currentItemSelected != oldItem) {
+			PlayFabGameBridge.currentGunName = PlayFabGameBridge.gunNames [currentItemSelected];
+			PlayFabGameBridge.currentGun = PlayFabGameBridge.gunTypes [PlayFabGameBridge.currentGunName];
+		}
+	}	
 }

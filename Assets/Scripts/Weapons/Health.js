@@ -67,7 +67,6 @@ function OnDamage (amount : float, fromDirection : Vector3) {
 	#endif
 	*/
 
-	health -= amount;
 	if (gameObject.layer==LayerMask.NameToLayer("Player")){
 		health = PlayFabGameBridge.playerHealth -= amount;
 	}else{
@@ -102,15 +101,7 @@ function OnDamage (amount : float, fromDirection : Vector3) {
 	{
 		GameScore.RegisterDeath (gameObject);
 		if (gameObject.layer!=LayerMask.NameToLayer("Player")){
-			PlayFabGameBridge.kills +=1;
-			switch(gameObject.name){
-				case "KamikazeBuzzer":PlayFabGameBridge.money +=3;
-				break;
-				case "EnemySpider":PlayFabGameBridge.money +=1;
-				break;
-				case "EnemyMech":PlayFabGameBridge.money +=10;
-				break;
-			}
+			PlayFabGameBridge.totalKills +=1;
 		}
 
 		health = 0;

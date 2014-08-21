@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using PlayFab;
 using PlayFab.ClientModels;
+using Pathfinding.Serialization.JsonFx;
 
 public class PlayFabMarketMenu : MonoBehaviour {
 
@@ -40,13 +41,16 @@ public class PlayFabMarketMenu : MonoBehaviour {
 			Rect marketIconRect = new Rect (iconsSpace,Screen.height-marketIcon.height-iconsSpace,marketIcon.width,marketIcon.height );
 			if (GUI.Button (marketIconRect, marketIcon,GUIStyle.none)) {
 				showMenu = !showMenu;
-				PlayFabGameBridge.menuClosed = !PlayFabGameBridge.menuClosed;
+				Time.timeScale = !showMenu ? 1.0f : 0.0f;
 			};
 			drawCursor = false;
 			if (Input.mousePosition.x < marketIconRect.x + marketIconRect.width && Input.mousePosition.x > marketIconRect.x && Screen.height - Input.mousePosition.y < marketIconRect.y + marketIconRect.height && Screen.height - Input.mousePosition.y > marketIconRect.y)
-					drawCursor = true;
+			{
+				drawCursor = true;
+			}
 
 			if (showMenu) {
+				PlayFabGameBridge.mouseOverGui = true;
 				Rect winRect = new Rect (Screen.width * 0.5f - marketMenu.width *0.5f,100,marketMenu.width,marketMenu.height );
 				GUI.DrawTexture (winRect, marketMenu);
 				if (Input.mousePosition.x < winRect.x + winRect.width && Input.mousePosition.x > winRect.x && Screen.height - Input.mousePosition.y < winRect.y + winRect.height && Screen.height - Input.mousePosition.y > winRect.y)
@@ -55,9 +59,8 @@ public class PlayFabMarketMenu : MonoBehaviour {
 				Rect closeRect = new Rect (winRect.x+marketMenu.width-close.width,winRect.y,close.width,close.height );
 				if (GUI.Button (closeRect, close,GUIStyle.none)) {
 					showMenu = false;
+					Time.timeScale = !showMenu ? 1.0f : 0.0f;
 				};
-
-
 
 				GUIStyle centeredStyle = GUI.skin.GetStyle("Label");
 				centeredStyle.alignment = TextAnchor.UpperCenter;
@@ -98,12 +101,12 @@ public class PlayFabMarketMenu : MonoBehaviour {
 			if (drawCursor) {
 				Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,cursor.width,cursor.height );
 				GUI.DrawTexture (cursorRect, cursor);
+				PlayFabGameBridge.mouseOverGui = true;
 			}
 		}
 	}
 
 	void Update () {
-		PlayFabGameBridge.menuClosed = !showMenu;
 	}
 
 	/////
@@ -117,6 +120,26 @@ public class PlayFabMarketMenu : MonoBehaviour {
 	private void ConstructCatalog(GetCatalogItemsResult result){
 		items = result.Catalog;
 		renderCatalog = true;
+
+		// construct the default gun type
+		PlayFabGameBridge.gunNames = new List<string> ();
+		PlayFabGameBridge.gunTypes = new Dictionary<string,Gun> ();
+
+		PlayFabGameBridge.currentGunName = "Default";
+		PlayFabGameBridge.gunNames.Add (PlayFabGameBridge.currentGunName);
+		PlayFabGameBridge.gunTypes.Add (PlayFabGameBridge.currentGunName, new Gun{Frequency=10.0F, ConeAngle=1.5F, DamagePerSecond=20.0F, HitSoundVolume=0.5F, Pitch=1.0F});	// default gun
+		PlayFabGameBridge.currentGun = PlayFabGameBridge.gunTypes [PlayFabGameBridge.currentGunName];
+
+		for (int x = 0; x < items.Count; x++) {
+			if (items [x].ItemClass.StartsWith("AmmoPack") && !PlayFabGameBridge.gunTypes.ContainsKey(items[x].ItemClass)) {
+				// add a new gun type
+				string newGunName = items[x].ItemClass;
+				Debug.Log ("Custom gun " + newGunName + " data: " + items[x].CustomData);
+				Gun newGun = JsonReader.Deserialize<Gun>(items[x].CustomData);
+				PlayFabGameBridge.gunNames.Add (newGunName);
+				PlayFabGameBridge.gunTypes.Add (newGunName, newGun);
+			}
+		}
 	}
 
 	void OnPlayFabError(PlayFabError error)

@@ -27,14 +27,15 @@ public class PlayFabItemsController : SingletonMonoBehaviour<PlayFabItemsControl
 		PlayFabGameBridge.consumableItemsConsumed = new Dictionary<string,uint?>(); 
 		for (int i = 0; i<Inventory.Count; i++) {
 			if (Inventory [i].RemainingUses != null) {
-				if (PlayFabGameBridge.consumableItems.ContainsKey(Inventory[i].ItemId))
+				Debug.Log ("Adding " + Inventory[i].RemainingUses + " of class " + Inventory[i].ItemClass);
+				if (PlayFabGameBridge.consumableItems.ContainsKey(Inventory[i].ItemClass))
 				{
-					PlayFabGameBridge.consumableItems[Inventory[i].ItemId] += Inventory[i].RemainingUses;
+					PlayFabGameBridge.consumableItems[Inventory[i].ItemClass] += Inventory[i].RemainingUses;
 				}
 				else
 				{
-					PlayFabGameBridge.consumableItems.Add(Inventory[i].ItemId,Inventory[i].RemainingUses);
-					PlayFabGameBridge.consumableItemsConsumed.Add(Inventory[i].ItemId,0);
+					PlayFabGameBridge.consumableItems.Add(Inventory[i].ItemClass,Inventory[i].RemainingUses);
+					PlayFabGameBridge.consumableItemsConsumed.Add(Inventory[i].ItemClass,0);
 				}
 			}
 		}
@@ -58,10 +59,10 @@ public class PlayFabItemsController : SingletonMonoBehaviour<PlayFabItemsControl
 		}
 	}
 
-	private void ConsumeCalculator (string ItemId,uint? toConsume){
+	private void ConsumeCalculator (string ItemClass,uint? toConsume){
 			ConsumeItemRequest request = new ConsumeItemRequest ();
 			for (int i = 0; i<Inventory.Count; i++) {
-				if (Inventory[i].RemainingUses != null && Inventory[i].ItemId == ItemId && Inventory[i].RemainingUses != 0) {
+				if (Inventory[i].RemainingUses != null && Inventory[i].ItemClass == ItemClass && Inventory[i].RemainingUses != 0) {
 					request.ItemInstanceId = Inventory[i].ItemInstanceId;
 					if(toConsume>=Inventory[i].RemainingUses){
 						toConsume -= Inventory[i].RemainingUses;

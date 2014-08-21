@@ -14,16 +14,10 @@ function Start () {
 #endif
 
 function Update () {
-	if(PlayFabGameBridge.currentGun==2 && PlayFabGameBridge.consumableItems.ContainsKey("ammo_pack_1") && PlayFabGameBridge.consumableItems["ammo_pack_1"]<1){
+	if(PlayFabGameBridge.currentGunName != "Default" && PlayFabGameBridge.consumableItems.ContainsKey(PlayFabGameBridge.currentGunName) && PlayFabGameBridge.consumableItems[PlayFabGameBridge.currentGunName]<1){
 		state = false;
 		mouseUpSignals.SendSignals (this);
-		PlayFabGameBridge.consumableItems["ammo_pack_1"] = 0;
-		return;
-	}
-	if(PlayFabGameBridge.currentGun==3 && PlayFabGameBridge.consumableItems.ContainsKey("ammo_pack_2") &&  PlayFabGameBridge.consumableItems["ammo_pack_2"]<1){
-		state = false;
-		mouseUpSignals.SendSignals (this);
-		PlayFabGameBridge.consumableItems["ammo_pack_2"] = 0;
+		PlayFabGameBridge.consumableItems[PlayFabGameBridge.currentGunName] = 0;
 		return;
 	}
 #if UNITY_IPHONE || UNITY_ANDROID || UNITY_WP8 || UNITY_BLACKBERRY

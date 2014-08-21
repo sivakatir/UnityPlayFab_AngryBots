@@ -8,6 +8,8 @@ public class DemoControl : MonoBehaviour
 	
 	private const float cornerTextureSize = 48.0f;
 	private const float menuWidth = 200.0f, menuHeight = 241.0f, menuHeaderHeight = 26.0f, buttonWidth = 175.0f, buttonHeight = 30.0f;
+
+	private bool isPaused; // PlayFab -- needed because we are drawing our own UI which pauses the game
 	
 	private bool fullScreenAvailable = false, quitEnabled = true, directKeyQuit = true;
 	
@@ -22,8 +24,7 @@ public class DemoControl : MonoBehaviour
 		Time.timeScale = 1.0f;
 		Application.LoadLevel (0);
 	}
-	
-	
+
 	public bool AudioEnabled
 	{
 		get
@@ -36,8 +37,7 @@ public class DemoControl : MonoBehaviour
 			UpdateAudio ();
 		}
 	}
-	
-	
+
 	void Start ()
 	{
 		UpdateAudio ();
@@ -85,9 +85,9 @@ public class DemoControl : MonoBehaviour
 	
 	public void FlipPause ()
 	{
-		Time.timeScale = Time.timeScale == 0.0f ? 1.0f : 0.0f;
+		isPaused = !isPaused;	// PlayFab
+		Time.timeScale = !isPaused ? 1.0f : 0.0f;
 	}
-	
 	
 	void Update ()
 	{
@@ -117,13 +117,13 @@ public class DemoControl : MonoBehaviour
 			case EventType.MouseDown:
 				if (rightRect.Contains (Event.current.mousePosition))
 				{
-					FlipPause ();
+					FlipPause (); // PlayFab
 					Event.current.Use ();
 				}
 			break;
 		}
 		
-		if (Time.timeScale != 0.0f)
+		if (!isPaused)
 		{
 			return;
 		}
@@ -144,7 +144,7 @@ public class DemoControl : MonoBehaviour
 			
 			if (MenuButton (resumeButton))
 			{
-				Time.timeScale = 1.0f;
+				FlipPause ();
 			}
 			
 			if (fullScreenAvailable)
