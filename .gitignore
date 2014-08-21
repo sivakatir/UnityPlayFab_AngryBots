@@ -6,7 +6,8 @@ Obj/
 UnityGenerated/
 Library/
 *.asset
- 
+*.data
+
 # ===================================== #
 # Visual Studio / MonoDevelop generated #
 # ===================================== #
