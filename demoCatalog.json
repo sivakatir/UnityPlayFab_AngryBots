@@ -1,0 +1,87 @@
+{
+  "CatalogVersion": "2",
+  "Catalog": [
+    {
+      "ItemId": "health_pack_2",
+      "ItemClass": "HealthPack:Partial",
+      "CatalogVersion": "2",
+      "DisplayName": "HEALTH PACKS",
+      "Description": "2 Health Packs",
+      "VirtualCurrencyPrices": {
+        "GC": 50
+      },
+      "Tags": [],
+      "GrantedIfPlayerHas": [],
+      "Consumable": {
+        "UsageCount": 2
+      }
+    },
+    {
+      "ItemId": "health_pack_1",
+      "ItemClass": "HealthPack:Partial",
+      "CatalogVersion": "2",
+      "DisplayName": "HEALTH PACKS",
+      "Description": "5 Health Packs",
+      "VirtualCurrencyPrices": {
+        "GC": 100
+      },
+      "Tags": [],
+      "GrantedIfPlayerHas": [],
+      "Consumable": {
+        "UsageCount": 5
+      }
+    },
+    {
+      "ItemId": "ammo_pack_1",
+      "ItemClass": "AmmoPack:Burst",
+      "CatalogVersion": "2",
+      "DisplayName": "BURST AMMO",
+      "Description": "400 Ammo",
+      "VirtualCurrencyPrices": {
+        "GC": 150
+      },
+      "Tags": [],
+      "GrantedIfPlayerHas": [],
+      "Consumable": {
+        "UsageCount": 400
+      },
+      "CustomData": "{\"Frequency\":20,\"ConeAngle\":5,\"DamagePerSecond\":80,\"HitSoundVolume\":10,\"Pitch\":3}"
+    },
+    {
+      "ItemId": "ammo_pack_2",
+      "ItemClass": "AmmoPack:Cannon",
+      "CatalogVersion": "2",
+      "DisplayName": "CANNON AMMO",
+      "Description": "10 Ammo",
+      "VirtualCurrencyPrices": {
+        "GC": 150
+      },
+      "Tags": [],
+      "GrantedIfPlayerHas": [],
+      "Consumable": {
+        "UsageCount": 10
+      },
+      "CustomData": "{\"Frequency\":2,\"ConeAngle\":20,\"DamagePerSecond\":200,\"HitSoundVolume\":5,\"Pitch\":0.2}"
+    },
+    {
+      "ItemId": "war_pack_1",
+      "ItemClass": "GearBundle",
+      "CatalogVersion": "2",
+      "DisplayName": "WAR PACK",
+      "Description": "400 Burst\r\n10 Canon\r\n2 Health Packs",
+      "VirtualCurrencyPrices": {
+        "GC": 220
+      },
+      "Tags": [],
+      "GrantedIfPlayerHas": [],
+      "Bundle": {
+        "BundledItems": [
+          "ammo_pack_1",
+          "ammo_pack_2",
+          "health_pack_2"
+        ],
+        "BundledResultTables": []
+      }
+    }
+  ]
+}
