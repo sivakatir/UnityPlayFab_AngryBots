@@ -14,7 +14,7 @@ function Start () {
 #endif
 
 function Update () {
-	if(PlayFabGameBridge.currentGunName != "Default" && PlayFabGameBridge.consumableItems.ContainsKey(PlayFabGameBridge.currentGunName) && PlayFabGameBridge.consumableItems[PlayFabGameBridge.currentGunName]<1){
+	if(PlayFabGameBridge.currentGun==null || PlayFabGameBridge.currentGunName != "Default" && PlayFabGameBridge.consumableItems.ContainsKey(PlayFabGameBridge.currentGunName) && PlayFabGameBridge.consumableItems[PlayFabGameBridge.currentGunName]<1){
 		state = false;
 		mouseUpSignals.SendSignals (this);
 		PlayFabGameBridge.consumableItems[PlayFabGameBridge.currentGunName] = 0;

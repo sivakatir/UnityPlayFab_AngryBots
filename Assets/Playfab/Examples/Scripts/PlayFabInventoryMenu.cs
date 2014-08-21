@@ -25,11 +25,11 @@ public class PlayFabInventoryMenu : PlayFabItemsController {
 	}
 
 	void OnGUI () {
-		if(InventoryLoaded){
+		if(InventoryLoaded && PlayFabGameBridge.currentGun != null){
 			totalWidth = (textureWidth * itemTextures.Count) + (spaceInBetween * itemTextures.Count - 1);
 			itemsRect[0] = new Rect (Screen.width * 0.5f - totalWidth * 0.5f-itemTextures[0].width-spaceInBetween, Screen.height - itemTextures[0].height - 20, totalWidth, itemTextures[0].height - 20);
 
-			for (int i = 1; i<=itemTextures.Count; i++) {
+			for (int i = 1; i<=PlayFabGameBridge.gunNames.Count; i++) {
 				itemsRect[i] = new Rect (itemsRect[i-1].x+spaceInBetween+itemTextures[0].width,Screen.height - itemTextures[0].height - 20,itemTextures[0].width, itemTextures[0].height);
 				if (currentItemSelected == i-1) {
 					itemsRect[i].y -= 10;
@@ -37,10 +37,13 @@ public class PlayFabInventoryMenu : PlayFabItemsController {
 				}
 				else GUI.DrawTexture (itemsRect[i], itemTextures[(i-1)]);
 				uint? num = 0;
-				if (i > 1 && PlayFabGameBridge.consumableItems.ContainsKey(PlayFabGameBridge.gunNames[i-1])) // because item 1 has infinite ammo
+				if (i > 1) // because item 1 has infinite ammo
 				{
-					num = PlayFabGameBridge.consumableItems[PlayFabGameBridge.gunNames[i-1]];
-					GUI.Label (new Rect (itemsRect[i].x, itemsRect[i].y-itemsRect[i].height+55, 80, 80), "<size=22>"+num+"</size>");
+					if(PlayFabGameBridge.consumableItems.ContainsKey(PlayFabGameBridge.gunNames[i-1])){
+						num = PlayFabGameBridge.consumableItems[PlayFabGameBridge.gunNames[i-1]];
+					}
+					Rect labelRect = GUILayoutUtility.GetRect(new GUIContent("<size=22>"+num+"</size>"), "label");
+					GUI.Label (new Rect (itemsRect[i].x+itemsRect[i].width/2-labelRect.width/2, itemsRect[i].y-itemsRect[i].height+75, labelRect.width, labelRect.height), "<size=22>"+num+"</size>");
 				}
 			}
 		}
