@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class Gun {
 	public float Frequency;
 	public float ConeAngle;
@@ -42,3 +43,4 @@ public class PlayFabGameBridge : MonoBehaviour{
 		consumableItemsConsumed[str] = 0;
 	}
 }
+

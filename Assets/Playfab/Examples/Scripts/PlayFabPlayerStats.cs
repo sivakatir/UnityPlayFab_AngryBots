@@ -13,6 +13,20 @@ namespace PlayFab.Examples{
 
 		private int totalKillsOld;
 
+		static PlayFabPlayerStats instance;
+
+		static PlayFabPlayerStats Instance
+		{
+			get
+			{
+				if (instance == null)
+				{
+					instance = (PlayFabPlayerStats)FindObjectOfType (typeof (PlayFabPlayerStats));
+				}
+				return instance;
+			}
+		}
+
 		public void Start() {
 			GetUserDataRequest request = new GetUserDataRequest ();
 			PlayFabClientAPI.GetUserData (request, LoadPlayerData, OnPlayFabError);
@@ -84,10 +98,23 @@ namespace PlayFab.Examples{
 			GUI.DrawTexture (cursorRect, cursor);
 			GUI.Box (new Rect (posX +100, posY, 200, 50),"");
 			GUI.Label (new Rect (posX +100, posY, 200, 200), "<size=12>"+PlayFabTitleData.Data[iconText]+"</size>");
-
-
 		}
 
+		public void LogCustomEvent(string eventName, Dictionary<string,object> body)
+		{
+			PlayFab.ClientModels.LogEventRequest request = new LogEventRequest ();
+			request.eventName = eventName;
+			request.Body = body;
+			PlayFabClientAPI.LogEvent (request, EventLogged, OnPlayFabError);
+		}
+		
+		private void EventLogged(LogEventResult result)
+		{
+			foreach (string resultError in result.errors) {
+				Debug.Log ("Event error " + resultError);
+			}
+		}
+		
 		void OnPlayFabError(PlayFabError error)
 		{
 			Debug.Log ("Got an error: " + error.ErrorMessage);

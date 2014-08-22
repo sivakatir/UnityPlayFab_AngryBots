@@ -102,6 +102,15 @@ function OnDamage (amount : float, fromDirection : Vector3) {
 		GameScore.RegisterDeath (gameObject);
 		if (gameObject.layer!=LayerMask.NameToLayer("Player")){
 			PlayFabGameBridge.totalKills +=1;
+			
+			// log custom event
+			//var eventData = {};
+			//eventData["x"] = gameObject.transform.position.x;
+			//eventData["y"] = gameObject.transform.position.y;
+			//eventData["z"] = gameObject.transform.position.z;
+			//eventData["name"] = gameObject.name;
+			
+			// PlayFabGameBridge.LogCustomEvent("enemy_killed",eventData);
 		}
 
 		health = 0;
