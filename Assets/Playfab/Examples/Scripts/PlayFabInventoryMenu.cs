@@ -25,7 +25,7 @@ public class PlayFabInventoryMenu : PlayFabItemsController {
 	}
 
 	void OnGUI () {
-		if(InventoryLoaded && PlayFabGameBridge.currentGun != null){
+		if(InventoryLoaded && PlayFabGameBridge.gunNames != null && PlayFabGameBridge.currentGun != null && PlayFabGameBridge.gameState == 3){
 			totalWidth = (textureWidth * itemTextures.Count) + (spaceInBetween * itemTextures.Count - 1);
 			itemsRect[0] = new Rect (Screen.width * 0.5f - totalWidth * 0.5f-itemTextures[0].width-spaceInBetween, Screen.height - itemTextures[0].height - 20, totalWidth, itemTextures[0].height - 20);
 

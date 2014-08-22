@@ -1,8 +1,8 @@
 {
-  "CatalogVersion": "3",
+  "CatalogVersion": "2",
   "Catalog": [
     {
-      "ItemId": "health_pack_2_b7f4",
+      "ItemId": "health_pack_2",
       "ItemClass": "HealthPack:Partial",
       "CatalogVersion": "2",
       "DisplayName": "HEALTH PACKS",
@@ -14,10 +14,11 @@
       "GrantedIfPlayerHas": [],
       "Consumable": {
         "UsageCount": 2
-      }
+      },
+      "CustomData": "{\"Icon\":\"health\"}"
     },
     {
-      "ItemId": "health_pack_1_b7f4",
+      "ItemId": "health_pack_1",
       "ItemClass": "HealthPack:Partial",
       "CatalogVersion": "2",
       "DisplayName": "HEALTH PACKS",
@@ -29,10 +30,11 @@
       "GrantedIfPlayerHas": [],
       "Consumable": {
         "UsageCount": 5
-      }
+      },
+      "CustomData": "{\"Icon\":\"health\"}"
     },
     {
-      "ItemId": "ammo_pack_1_b7f4",
+      "ItemId": "ammo_pack_1",
       "ItemClass": "AmmoPack:Burst",
       "CatalogVersion": "2",
       "DisplayName": "BURST AMMO",
@@ -45,10 +47,10 @@
       "Consumable": {
         "UsageCount": 400
       },
-      "CustomData": "{\"Frequency\":20,\"ConeAngle\":5,\"DamagePerSecond\":80,\"HitSoundVolume\":10,\"Pitch\":3}"
+      "CustomData": "{\"Frequency\":20,\"ConeAngle\":5,\"DamagePerSecond\":80,\"HitSoundVolume\":10,\"Pitch\":3,\"Icon\":\"gun2\"}"
     },
     {
-      "ItemId": "ammo_pack_2_b7f4",
+      "ItemId": "ammo_pack_2",
       "ItemClass": "AmmoPack:Cannon",
       "CatalogVersion": "2",
       "DisplayName": "CANNON AMMO",
@@ -61,10 +63,10 @@
       "Consumable": {
         "UsageCount": 10
       },
-      "CustomData": "{\"Frequency\":2,\"ConeAngle\":20,\"DamagePerSecond\":200,\"HitSoundVolume\":5,\"Pitch\":0.2}"
+      "CustomData": "{\"Frequency\":2,\"ConeAngle\":20,\"DamagePerSecond\":200,\"HitSoundVolume\":5,\"Pitch\":0.2,\"Icon\":\"gun3\"}"
     },
     {
-      "ItemId": "war_pack_1_b7f4",
+      "ItemId": "war_pack_1",
       "ItemClass": "GearBundle",
       "CatalogVersion": "2",
       "DisplayName": "WAR PACK",
@@ -74,6 +76,7 @@
       },
       "Tags": [],
       "GrantedIfPlayerHas": [],
+      "CustomData": "{\"Icon\":\"crate\"}",
       "Bundle": {
         "BundledItems": [
           "ammo_pack_1",

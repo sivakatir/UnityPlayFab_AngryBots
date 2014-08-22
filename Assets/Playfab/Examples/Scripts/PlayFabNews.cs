@@ -25,12 +25,18 @@ namespace PlayFab.Examples{
 		void Start () {
 			GetTitleNewsRequest request = new GetTitleNewsRequest ();
 			request.Count = Convert.ToInt32(newsToLoad);
-			PlayFabClientAPI.GetTitleNews (request, OnNewsResult, OnPlayFabError);
-		}
+			if (PlayFabData.AuthKey != null)
+				PlayFabClientAPI.GetTitleNews (request, OnNewsResult, OnPlayFabError);
+		}	
 
 		private void OnNewsResult(GetTitleNewsResult result){
 			news = result.News;
 			newsLoaded = true;
+
+			// as soon as the news gets loaded, show it -- as long as we're done logging in and registering the user
+			if (PlayFabGameBridge.gameState == 3) {
+				showNews = true;
+			}
 		}
 		
 		private void OnPlayFabError(PlayFabError error)
@@ -48,6 +54,7 @@ namespace PlayFab.Examples{
 				};
 				Rect winRect = new Rect (Screen.width * 0.5f - newsBackground.width *0.5f,100,newsBackground.width,newsBackground.height );
 				if (showNews) {
+					Time.timeScale = 0.0f;
 					GUI.DrawTexture (winRect, newsBackground);
 					Rect closeRect = new Rect (winRect.x+newsBackground.width-close.width,winRect.y,close.width,close.height );
 					if (GUI.Button (closeRect, close,GUIStyle.none)) {

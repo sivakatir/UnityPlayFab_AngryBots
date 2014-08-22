@@ -35,6 +35,8 @@ namespace PlayFab.Examples{
 		// if we are in "login" state, draw the login window on screen
 		void OnGUI () {
 			if (PlayFabGameBridge.gameState == 2) {
+				Time.timeScale = 0.0f;	// pause everything while we show the UI
+
 				Rect winRect = new Rect (0,0,playfabBackground.width, playfabBackground.height);
 				winRect.x = (int) ( Screen.width * 0.5f - winRect.width * 0.5f );
 				winRect.y = (int) ( Screen.height * 0.5f - winRect.height * 0.5f );
@@ -85,9 +87,12 @@ namespace PlayFab.Examples{
 
 		// callback function if player login is successful
 		public void OnLoginResult(LoginResult result){
-			PlayFabGameBridge.gameState = 3;	// switch to playing the game
-			if(PlayFabData.AngryBotsModActivated)Application.LoadLevel ("Default"); // load the first level
-			else Application.LoadLevel (nextScene);
+			PlayFabGameBridge.gameState = 3;	// switch to playing the game; hide this dialog
+			Time.timeScale = 1.0f;	// unpause...
+			Application.LoadLevel (nextScene);
+
+			//if(PlayFabData.AngryBotsModActivated)Application.LoadLevel ("Default"); // load the first level
+			//else Application.LoadLevel (nextScene);
 		}
 
 		// callback function if there is an error -- display appropriate error message

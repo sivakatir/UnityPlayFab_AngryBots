@@ -29,22 +29,24 @@ namespace PlayFab.Examples{
 
 		public void Start() {
 			GetUserDataRequest request = new GetUserDataRequest ();
-			PlayFabClientAPI.GetUserData (request, LoadPlayerData, OnPlayFabError);
+			if (PlayFabData.AuthKey != null)
+				PlayFabClientAPI.GetUserData (request, LoadPlayerData, OnPlayFabError);
 			InvokeRepeating("SavePlayerState", 10, 10);
 		}
 
 		private void LoadPlayerData(GetUserDataResult result)
 		{
 			Debug.Log ("Player data loaded.");
-			if (result.Data.ContainsKey ("TotalKills")) {
-				PlayFabGameBridge.totalKills = int.Parse(result.Data["TotalKills"].Value);
-			}
+			if (result.Data.ContainsKey ("TotalKills"))	
+				PlayFabGameBridge.totalKills = int.Parse (result.Data ["TotalKills"].Value);
+			else
+				PlayFabGameBridge.totalKills = 0;
 			totalKillsOld = PlayFabGameBridge.totalKills;
 		}
 		
 		private void SavePlayerState()
 		{
-			if (PlayFabGameBridge.totalKills != totalKillsOld) {	// we need to save
+			if (PlayFabGameBridge.totalKills != totalKillsOld && PlayFabData.AuthKey != null) {	// we need to save
 				// first save as a player property (poor man's save game)
 				Debug.Log ("Saving player data...");
 				UpdateUserDataRequest request = new UpdateUserDataRequest ();
@@ -74,7 +76,8 @@ namespace PlayFab.Examples{
 		{
 			PlayFab.ClientModels.UpdateUserStatisticsRequest request = new PlayFab.ClientModels.UpdateUserStatisticsRequest ();
 			request.UserStatistics = stats;
-			PlayFabClientAPI.UpdateUserStatistics (request, StatsUpdated, OnPlayFabError);
+			if (PlayFabData.AuthKey != null)
+				PlayFabClientAPI.UpdateUserStatistics (request, StatsUpdated, OnPlayFabError);
 		}
 		
 		private void StatsUpdated(PlayFab.ClientModels.UpdateUserStatisticsResult result)
@@ -124,7 +127,8 @@ namespace PlayFab.Examples{
 			PlayFab.ClientModels.LogEventRequest request = new LogEventRequest ();
 			request.eventName = eventName;
 			request.Body = body;
-			PlayFabClientAPI.LogEvent (request, EventLogged, OnPlayFabError);
+			if (PlayFabData.AuthKey != null)
+				PlayFabClientAPI.LogEvent (request, EventLogged, OnPlayFabError);
 		}
 		
 		private void EventLogged(LogEventResult result)

@@ -39,6 +39,7 @@ namespace PlayFab.Examples{
 
 		void OnGUI () {
 			if (PlayFabGameBridge.gameState == 1) {
+				Time.timeScale = 0.0f;	// pause everything while we show the UI
 				Rect winRect = new Rect (0,0,playfabBackground.width, playfabBackground.height);
 				winRect.x = (int) ( Screen.width * 0.5f - winRect.width * 0.5f );
 				winRect.y = (int) ( Screen.height * 0.5f - winRect.height * 0.5f );
@@ -105,8 +106,6 @@ namespace PlayFab.Examples{
 		}
 
 		public void OnRegisterResult(RegisterPlayFabUserResult result){
-			PlayFabGameBridge.gameState = 3;
-
 			// now need to store a title-specific display name for this game
 			// this is the name that will show up in the leaderboard
 			UpdateUserTitleDisplayNameRequest request = new UpdateUserTitleDisplayNameRequest ();
@@ -118,8 +117,12 @@ namespace PlayFab.Examples{
 		{
 			Debug.Log ("Name " + result.DisplayName + " updated");
 
-			if(PlayFabData.AngryBotsModActivated)Application.LoadLevel ("Default");
-			else Application.LoadLevel (confirmScene);
+			Time.timeScale = 1.0f;	// unpause and start game...
+			PlayFabGameBridge.gameState = 3;
+			Application.LoadLevel (confirmScene);	// now reset the level -- force load of all the properties
+
+			//if(PlayFabData.AngryBotsModActivated)Application.LoadLevel ("Default");
+			//else Application.LoadLevel (confirmScene);
 		}
 
 		void OnPlayFabError(PlayFabError error)

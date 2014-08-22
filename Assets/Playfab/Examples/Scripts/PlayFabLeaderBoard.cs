@@ -29,7 +29,8 @@ namespace PlayFab.Examples{
 			PlayFab.ClientModels.GetLeaderboardRequest request = new PlayFab.ClientModels.GetLeaderboardRequest ();
 			request.MaxResultsCount = 50;
 			request.StatisticName = "Score";
-			PlayFabClientAPI.GetLeaderboard (request, ConstructLeaderboard, OnPlayFabError);
+			if (PlayFabData.AuthKey != null)
+				PlayFabClientAPI.GetLeaderboard (request, ConstructLeaderboard, OnPlayFabError);
 		}
 
 		// Update is called once per frame
@@ -92,7 +93,7 @@ namespace PlayFab.Examples{
 			LeaderboardHighScores.Clear ();
 
 			foreach (PlayFab.ClientModels.PlayerLeaderboardEntry entry in result.Leaderboard) {
-				if (entry.DisplayName.Length > 0)
+				if (entry.DisplayName != null)
 					LeaderboardHighScores.Add (entry.DisplayName, (uint)entry.StatValue); 
 				else
 					LeaderboardHighScores.Add (entry.PlayFabId, (uint)entry.StatValue); 

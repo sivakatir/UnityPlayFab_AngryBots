@@ -22,7 +22,7 @@ public class PlayFabGameBridge : MonoBehaviour{
 
 	public static Dictionary<string,Gun> gunTypes;
 	public static List<string> gunNames;
-	public static Gun currentGun;
+	public static Gun currentGun = new Gun{Frequency=10.0F, ConeAngle=1.5F, DamagePerSecond=20.0F, HitSoundVolume=0.5F, Pitch=1.0F};
 	public static string currentGunName = "Default";
 
 	// Disable firing when mouse is hovering over UI

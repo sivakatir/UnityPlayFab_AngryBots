@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,9 +7,16 @@ using PlayFab.ClientModels;
 using Pathfinding.Serialization.JsonFx;
 
 namespace PlayFab.Examples{
+
+	// hack to help deserialize the custom data out of the catalog item
+	public class IconClass {
+		public string iconName;
+	}
+
+
 	public class PlayFabMarketMenu : MonoBehaviour {
 
-		public Texture2D marketIcon,marketMenu,gun2,gun3,health,close,cursor;
+		public Texture2D marketIcon,marketMenu,gun2,gun3,health,crate,close,cursor;
 
 		public int titleSize;
 		public int textSize;
@@ -25,6 +32,9 @@ namespace PlayFab.Examples{
 		private bool drawCursor;
 
 		private List<CatalogItem> items; 
+		private Dictionary<string,Texture2D> icons;
+		private Dictionary<string,Texture2D> itemIcons;
+
 		private bool renderCatalog = false;
 
 		private void Start () {
@@ -32,9 +42,16 @@ namespace PlayFab.Examples{
 			/// Get's the specified version of the title's catalog of virtual goods, including purchase options and pricing details
 			/// associated with the game title and catalog verion set in Playfab / Developer settings
 			////
+			icons = new Dictionary<string,Texture2D> ();
+			icons.Add ("health", health);
+			icons.Add ("gun2", gun2);
+			icons.Add ("gun3", gun3);
+			icons.Add ("crate", crate);
+
 			GetCatalogItemsRequest request = new GetCatalogItemsRequest();
 			request.CatalogVersion = PlayFabData.CatalogVersion;
-			PlayFabClientAPI.GetCatalogItems (request,ConstructCatalog,OnPlayFabError);
+			if (PlayFabData.AuthKey != null)
+				PlayFabClientAPI.GetCatalogItems (request,ConstructCatalog,OnPlayFabError);
 			//Time.timeScale = 0;
 		}
 		
@@ -71,11 +88,12 @@ namespace PlayFab.Examples{
 					int btnHeight = 165;
 
 					for(int x = 0; x < items.Count;  x++)	{
+						Texture2D texture = itemIcons[items[x].ItemId];
 						Rect btn1Rect = new Rect (winRect.x+buttonX+(btnWidth*x)+(iconsSpace*x),winRect.y+buttonY,btnWidth,btnHeight );	
 						Rect labelRect = GUILayoutUtility.GetRect(new GUIContent("<size="+titleSize+">"+items[x].DisplayName+"</size>"), "label");
 						labelRect.x = btn1Rect.x + btn1Rect.width*0.5f-labelRect.width*0.5f;
 						labelRect.y = btn1Rect.y+textY;
-						Rect gun2Rect = new Rect (btn1Rect.x+btn1Rect.width*0.5f-gun2.width*0.5f,btn1Rect.y+iconsY,gun2.width, gun2.height);
+						Rect gun2Rect = new Rect (btn1Rect.x+btn1Rect.width*0.5f-texture.width*0.5f,btn1Rect.y+iconsY,texture.width, texture.height);
 						Rect labelRectb = GUILayoutUtility.GetRect(new GUIContent("<size="+textSize+">"+items[x].Description+"</size>"), "label");
 						labelRectb.width = 100;
 						labelRectb.height = 80;
@@ -92,10 +110,10 @@ namespace PlayFab.Examples{
 								request.ItemId = items[x].ItemId;
 								PlayFabClientAPI.PurchaseItem(request,PlayFabItemsController.OnPurchase,OnPlayFabError);
 							};
-							GUI.Label (new Rect (btn1Rect.x+btn1Rect.width*0.5f-10,labelRectb.y+35,40, 40), "<size="+priceTextSize+">"+price.Value+" $</size>",centeredStyle);
+							GUI.Label (new Rect (btn1Rect.x+btn1Rect.width*0.5f-10,labelRectb.y+50,40, 40), "<size="+priceTextSize+">"+price.Value+" $</size>",centeredStyle);
 						}
 						GUI.Label (labelRect, "<size="+titleSize+">"+items[x].DisplayName+"</size>",centeredStyle);
-						GUI.DrawTexture (gun2Rect, gun2);
+						GUI.DrawTexture (gun2Rect, texture);
 						GUI.Label (labelRectb, "<size="+textSize+">"+items[x].Description+"</size>",centeredStyle);
 					
 					};
@@ -123,6 +141,8 @@ namespace PlayFab.Examples{
 			items = result.Catalog;
 			renderCatalog = true;
 
+			itemIcons = new Dictionary<string, Texture2D> ();
+
 			// construct the default gun type
 			PlayFabGameBridge.gunNames = new List<string> ();
 			PlayFabGameBridge.gunTypes = new Dictionary<string,Gun> ();
@@ -133,11 +153,18 @@ namespace PlayFab.Examples{
 			PlayFabGameBridge.currentGun = PlayFabGameBridge.gunTypes [PlayFabGameBridge.currentGunName];
 
 			for (int x = 0; x < items.Count; x++) {
+				Dictionary<string,string> customData = JsonReader.Deserialize<Dictionary<string,string>>(items[x].CustomData);
+				itemIcons.Add(items[x].ItemId, icons[customData["Icon"]]);
+
 				if (items [x].ItemClass.StartsWith("AmmoPack") && !PlayFabGameBridge.gunTypes.ContainsKey(items[x].ItemClass)) {
 					// add a new gun type
 					string newGunName = items[x].ItemClass;
-					Debug.Log ("Custom gun " + newGunName + " data: " + items[x].CustomData);
-					Gun newGun = JsonReader.Deserialize<Gun>(items[x].CustomData);
+//					Gun newGun = JsonReader.Deserialize<Gun>(items[x].CustomData);
+					Gun newGun = new Gun{Frequency=float.Parse(customData["Frequency"]),
+						ConeAngle=float.Parse(customData["ConeAngle"]),
+						DamagePerSecond=float.Parse(customData["DamagePerSecond"]),
+						HitSoundVolume=float.Parse(customData["HitSoundVolume"]),
+						Pitch=float.Parse(customData["Pitch"])};
 					PlayFabGameBridge.gunNames.Add (newGunName);
 					PlayFabGameBridge.gunTypes.Add (newGunName, newGun);
 				}
