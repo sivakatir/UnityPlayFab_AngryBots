@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: 2f6309b2ec4bfba4b81c44c96241139b
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: LeaderboardBackground
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: 07970f97093de1f4ea4e3208adae57ff
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: MarketMenuBackground
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

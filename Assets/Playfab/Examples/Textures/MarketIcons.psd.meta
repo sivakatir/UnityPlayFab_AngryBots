@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: f040613389c17174b961ce86723cd716
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: MarketIcons
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

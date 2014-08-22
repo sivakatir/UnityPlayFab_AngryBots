@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: 8ef2d57eb5baf8447be993db464a4e46
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: GunIcons
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

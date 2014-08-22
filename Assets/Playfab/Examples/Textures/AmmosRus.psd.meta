@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: f3d8082d88706ec49bdddd4e52d42c7e
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: AmmosRus
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

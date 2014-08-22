@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: 5e78420ff6f91af4fa2894de17f1641e
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: gun2m
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
