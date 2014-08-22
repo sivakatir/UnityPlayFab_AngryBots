@@ -52,6 +52,9 @@ namespace PlayFab.Examples{
 					showNews = !showNews;
 					Time.timeScale = !showNews ? 1.0f : 0.0f;
 				};
+				drawCursor = false;
+				if (Input.mousePosition.x < newsIconRect.x + newsIconRect.width && Input.mousePosition.x > newsIconRect.x && Screen.height - Input.mousePosition.y < newsIconRect.y + newsIconRect.height && Screen.height - Input.mousePosition.y > newsIconRect.y)
+					drawCursor = true;
 				Rect winRect = new Rect (Screen.width * 0.5f - newsBackground.width *0.5f,100,newsBackground.width,newsBackground.height );
 				if (showNews) {
 					Time.timeScale = 0.0f;
@@ -89,10 +92,9 @@ namespace PlayFab.Examples{
 						prevRect = labelRect;
 						prevRect.y += textSpace*2;
 					}
+					if (Input.mousePosition.x < winRect.x + winRect.width && Input.mousePosition.x > winRect.x && Screen.height - Input.mousePosition.y < winRect.y + winRect.height && Screen.height - Input.mousePosition.y > winRect.y)
+						drawCursor = true;
 				}
-				drawCursor = false;
-				if (Input.mousePosition.x < winRect.x + winRect.width && Input.mousePosition.x > winRect.x && Screen.height - Input.mousePosition.y < winRect.y + winRect.height && Screen.height - Input.mousePosition.y > winRect.y)
-					drawCursor = true;
 				if (drawCursor) {
 					Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,cursor.width,cursor.height );
 					GUI.DrawTexture (cursorRect, cursor);

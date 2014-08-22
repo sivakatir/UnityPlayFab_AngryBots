@@ -12,7 +12,7 @@ namespace PlayFab.Examples{
 		public string passwordLabel = "Password";
 		public string nextScene = "PF_PurchaseScene";
 		public string previousScene = "PF_UserRegisterScene";
-		public Texture2D playfabBackground;
+		public Texture2D playfabBackground,cursor;
 		public string accountNotFound = "That account could not be found.";
 		public string accountBanned = "That account has been banned.";
 		public string invalidPassword = "Password is invalid (6-24 characters).";
@@ -81,6 +81,12 @@ namespace PlayFab.Examples{
 				{
 					PlayFabGameBridge.gameState = 1;
 					if(!PlayFabData.AngryBotsModActivated)Application.LoadLevel (previousScene);
+				}
+
+
+				if (Input.mousePosition.x < winRect.x + winRect.width && Input.mousePosition.x > winRect.x && Screen.height - Input.mousePosition.y < winRect.y + winRect.height && Screen.height - Input.mousePosition.y > winRect.y){
+					Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,cursor.width,cursor.height );
+					GUI.DrawTexture (cursorRect, cursor);
 				}
 			}
 		}

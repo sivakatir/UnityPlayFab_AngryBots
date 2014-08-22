@@ -15,7 +15,7 @@ public class PlayFabGameBridge : MonoBehaviour{
 	
 	/// Game Attributes that are custom to the game.
 	/// The player health, kill, virtual currency and the current selected gun.
-	public static int playerHealth = 0;
+	public static int playerHealth = 100;
 	public static int totalKills = 0;
 
 	public static uint gameState = 2; // Can be used for game progress

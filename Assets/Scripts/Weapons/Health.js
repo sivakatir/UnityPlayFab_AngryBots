@@ -66,9 +66,8 @@ function OnDamage (amount : float, fromDirection : Vector3) {
 		amount *= 10.0;
 	#endif
 	*/
-
 	if (gameObject.layer==LayerMask.NameToLayer("Player")){
-		health = PlayFabGameBridge.playerHealth -= amount;
+		health = PlayFabGameBridge.playerHealth -= Mathf.Ceil(amount);
 	}else{
 		health -= amount;
 	}
@@ -100,9 +99,13 @@ function OnDamage (amount : float, fromDirection : Vector3) {
 	if (health <= 0)
 	{
 		GameScore.RegisterDeath (gameObject);
+		
+
+		health = 0;
+		dead = true;
 		if (gameObject.layer!=LayerMask.NameToLayer("Player")){
 			PlayFabGameBridge.totalKills +=1;
-			
+			enabled = false;
 			// log custom event
 			//var eventData = {};
 			//eventData["x"] = gameObject.transform.position.x;
@@ -112,14 +115,13 @@ function OnDamage (amount : float, fromDirection : Vector3) {
 			
 			// PlayFabGameBridge.LogCustomEvent("enemy_killed",eventData);
 		}
-
-		health = 0;
-		dead = true;
 		dieSignals.SendSignals (this);
-		enabled = false;
+		
+		
 
 		// scorch marks
 		if (scorchMark) {
+			Debug.Log("ScorchMark");
 			scorchMark.SetActive (true);
 			// @NOTE: maybe we can justify a raycast here so we can place the mark
 			// on slopes with proper normal alignments
@@ -142,7 +144,7 @@ function Regenerate () {
 	if (regenerateSpeed > 0.0f) {
 		while (enabled) {
 			if (Time.time > lastDamageTime + 3) {
-				health = PlayFabGameBridge.playerHealth += regenerateSpeed;
+				PlayFabGameBridge.playerHealth = health += regenerateSpeed;
 				
 				yield;
 

@@ -14,11 +14,20 @@ function Start () {
 #endif
 
 function Update () {
-	if(PlayFabGameBridge.currentGun==null || PlayFabGameBridge.currentGunName != "Default" && PlayFabGameBridge.consumableItems.ContainsKey(PlayFabGameBridge.currentGunName) && PlayFabGameBridge.consumableItems[PlayFabGameBridge.currentGunName]<1){
-		state = false;
-		mouseUpSignals.SendSignals (this);
-		PlayFabGameBridge.consumableItems[PlayFabGameBridge.currentGunName] = 0;
-		return;
+	if(PlayFabGameBridge.currentGunName != "Default"){
+		if(!PlayFabGameBridge.consumableItems.ContainsKey(PlayFabGameBridge.currentGunName) ){
+			Debug.Log(PlayFabGameBridge.consumableItems.ContainsKey(PlayFabGameBridge.currentGunName));
+			state = false;
+			mouseUpSignals.SendSignals (this);
+			PlayFabGameBridge.consumableItems[PlayFabGameBridge.currentGunName] = 0;
+			return;
+		}else if(PlayFabGameBridge.consumableItems[PlayFabGameBridge.currentGunName]<1){
+			state = false;
+			mouseUpSignals.SendSignals (this);
+			PlayFabGameBridge.consumableItems[PlayFabGameBridge.currentGunName] = 0;
+			return;
+		}
+		
 	}
 #if UNITY_IPHONE || UNITY_ANDROID || UNITY_WP8 || UNITY_BLACKBERRY
 	if (state == false && joysticks[0].tapCount > 0) {

@@ -15,7 +15,7 @@ namespace PlayFab.Examples{
 		public string confirmPasswordLabel = "Confirm Password";
 		public string nextScene = "PF_UserLoginScene";
 		public string confirmScene = "PF_PurchaseScene";
-		public Texture2D playfabBackground;
+		public Texture2D playfabBackground,cursor;
 		public string emailNotAvailable = "That email address is already taken.";
 		public string usernameNotAvailable = "That username is already taken.";
 		public string invalidPassword = "Password is invalid (6-24 characters).";
@@ -91,6 +91,11 @@ namespace PlayFab.Examples{
 				{
 					PlayFabGameBridge.gameState = 2;
 					if(!PlayFabData.AngryBotsModActivated)Application.LoadLevel (nextScene);
+				}
+
+				if (Input.mousePosition.x < winRect.x + winRect.width && Input.mousePosition.x > winRect.x && Screen.height - Input.mousePosition.y < winRect.y + winRect.height && Screen.height - Input.mousePosition.y > winRect.y){
+					Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,cursor.width,cursor.height );
+					GUI.DrawTexture (cursorRect, cursor);
 				}
 			}
 		}
