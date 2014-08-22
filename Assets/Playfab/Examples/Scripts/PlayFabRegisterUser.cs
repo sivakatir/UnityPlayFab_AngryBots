@@ -106,9 +106,22 @@ namespace PlayFab.Examples{
 
 		public void OnRegisterResult(RegisterPlayFabUserResult result){
 			PlayFabGameBridge.gameState = 3;
+
+			// now need to store a title-specific display name for this game
+			// this is the name that will show up in the leaderboard
+			UpdateUserTitleDisplayNameRequest request = new UpdateUserTitleDisplayNameRequest ();
+			request.DisplayName = result.Username;
+			PlayFabClientAPI.UpdateUserTitleDisplayName (request, NameUpdated, OnPlayFabError);
+		}
+
+		public void NameUpdated(UpdateUserTitleDisplayNameResult result)
+		{
+			Debug.Log ("Name " + result.DisplayName + " updated");
+
 			if(PlayFabData.AngryBotsModActivated)Application.LoadLevel ("Default");
 			else Application.LoadLevel (confirmScene);
 		}
+
 		void OnPlayFabError(PlayFabError error)
 		{
 			returnedError = true;

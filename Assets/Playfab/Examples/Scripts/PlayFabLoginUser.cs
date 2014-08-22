@@ -32,6 +32,7 @@ namespace PlayFab.Examples{
 			errorLabelStyle.normal.textColor = Color.red;
 		}
 
+		// if we are in "login" state, draw the login window on screen
 		void OnGUI () {
 			if (PlayFabGameBridge.gameState == 2) {
 				Rect winRect = new Rect (0,0,playfabBackground.width, playfabBackground.height);
@@ -56,6 +57,7 @@ namespace PlayFab.Examples{
 				userNameField = GUI.TextField (new Rect (winRect.x+130, yStart+25, 100, 20), userNameField);
 				passwordField = GUI.PasswordField  (new Rect (winRect.x+130, yStart+50, 100, 20), passwordField,"*"[0], 20);
 
+				// if the player clicks "login" then initiate a login request to PlayFab
 				if (GUI.Button (new Rect (winRect.x+18, yStart+100, 100, 30), "Login")||Event.current.Equals(Event.KeyboardEvent("[enter]"))) {
 					if(userNameField.Length>0 && passwordField.Length>0)
 					{
@@ -72,6 +74,7 @@ namespace PlayFab.Examples{
 					}
 				}
 
+				// if the player wants to register a new account instead, flip to the "register" dialog
 				if (GUI.Button(new Rect(winRect.x+18, yStart+175, 120, 20),"Register"))
 				{
 					PlayFabGameBridge.gameState = 1;
@@ -79,12 +82,15 @@ namespace PlayFab.Examples{
 				}
 			}
 		}
-		public void OnLoginResult(LoginResult result){
-			PlayFabGameBridge.gameState = 3;
-			if(PlayFabData.AngryBotsModActivated)Application.LoadLevel ("Default");
-			else Application.LoadLevel (nextScene);
 
+		// callback function if player login is successful
+		public void OnLoginResult(LoginResult result){
+			PlayFabGameBridge.gameState = 3;	// switch to playing the game
+			if(PlayFabData.AngryBotsModActivated)Application.LoadLevel ("Default"); // load the first level
+			else Application.LoadLevel (nextScene);
 		}
+
+		// callback function if there is an error -- display appropriate error message
 		void OnPlayFabError(PlayFabError error)
 		{
 			returnedError = true;
@@ -114,9 +120,5 @@ namespace PlayFab.Examples{
 				errorLabel = "Unknown Error.";
 			}
 		}
-
-
-
-
 	}
 }

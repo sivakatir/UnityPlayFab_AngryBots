@@ -45,11 +45,17 @@ namespace PlayFab.Examples{
 		private void SavePlayerState()
 		{
 			if (PlayFabGameBridge.totalKills != totalKillsOld) {	// we need to save
+				// first save as a player property (poor man's save game)
 				Debug.Log ("Saving player data...");
 				UpdateUserDataRequest request = new UpdateUserDataRequest ();
 				request.Data = new Dictionary<string, string> ();
 				request.Data.Add ("TotalKills", PlayFabGameBridge.totalKills.ToString ());
 				PlayFabClientAPI.UpdateUserData (request, PlayerDataSaved, OnPlayFabError);
+
+				// also save score as a stat for the leaderboard use...
+				Dictionary<string,int> stats = new Dictionary<string,int> ();
+				stats.Add("score", PlayFabGameBridge.totalKills);
+				storeStats(stats);
 			}
 			totalKillsOld = PlayFabGameBridge.totalKills;
 		}
@@ -63,6 +69,19 @@ namespace PlayFab.Examples{
 		{
 			SavePlayerState ();
 		}
+
+		public void storeStats(Dictionary<string,int> stats)
+		{
+			PlayFab.ClientModels.UpdateUserStatisticsRequest request = new PlayFab.ClientModels.UpdateUserStatisticsRequest ();
+			request.UserStatistics = stats;
+			PlayFabClientAPI.UpdateUserStatistics (request, StatsUpdated, OnPlayFabError);
+		}
+		
+		private void StatsUpdated(PlayFab.ClientModels.UpdateUserStatisticsResult result)
+		{
+			Debug.Log ("Stats updated");
+		}
+
 
 		void OnGUI () {
 			if (PlayFabItemsController.InventoryLoaded) {

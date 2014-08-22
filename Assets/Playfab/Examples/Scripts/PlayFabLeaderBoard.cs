@@ -31,7 +31,7 @@ namespace PlayFab.Examples{
 			request.StatisticName = "Score";
 			PlayFabClientAPI.GetLeaderboard (request, ConstructLeaderboard, OnPlayFabError);
 		}
-		
+
 		// Update is called once per frame
 		void OnGUI () {
 			if (leaderboardLoaded) {
@@ -40,6 +40,10 @@ namespace PlayFab.Examples{
 				if (GUI.Button (leaderboardIconRect, Icon,GUIStyle.none)) {
 					showLeaderboard = !showLeaderboard;
 					Time.timeScale = !showLeaderboard ? 1.0f : 0.0f;
+					if (showLeaderboard)
+					{
+						refreshLeaderboard();
+					}
 				};
 				drawCursor = false;
 				if (Input.mousePosition.x < leaderboardIconRect.x + leaderboardIconRect.width && Input.mousePosition.x > leaderboardIconRect.x && Screen.height - Input.mousePosition.y < leaderboardIconRect.y + leaderboardIconRect.height && Screen.height - Input.mousePosition.y > leaderboardIconRect.y)
@@ -81,19 +85,20 @@ namespace PlayFab.Examples{
 					PlayFabGameBridge.mouseOverGui = true;
 				}
 			}
-
 		}
-
 
 		private void ConstructLeaderboard (PlayFab.ClientModels.GetLeaderboardResult result)
 		{
 			LeaderboardHighScores.Clear ();
 
 			foreach (PlayFab.ClientModels.PlayerLeaderboardEntry entry in result.Leaderboard) {
-				LeaderboardHighScores.Add (entry.PlayFabId, (uint)entry.StatValue); 
+				if (entry.DisplayName.Length > 0)
+					LeaderboardHighScores.Add (entry.DisplayName, (uint)entry.StatValue); 
+				else
+					LeaderboardHighScores.Add (entry.PlayFabId, (uint)entry.StatValue); 
 			}
 
-			LeaderboardHighScores.Add ("ueryetyu",89); 
+/*			LeaderboardHighScores.Add ("ueryetyu",89); 
 			LeaderboardHighScores.Add ("qewyqey",88); 
 			LeaderboardHighScores.Add ("ddarhddd",50); 
 			LeaderboardHighScores.Add ("eewetheee dgld",49); 
@@ -119,6 +124,8 @@ namespace PlayFab.Examples{
 			LeaderboardHighScores.Add ("bybxc eryj",30); 
 			LeaderboardHighScores.Add ("kfjdaflcl",39); 
 			LeaderboardHighScores.Add ("fjcxblfhl dfgjlfhj",37); 
+*/
+
 			leaderboardLoaded = true;
 		}
 
@@ -126,6 +133,5 @@ namespace PlayFab.Examples{
 		{
 			Debug.Log ("Got an error: " + error.ErrorMessage);
 		}
-
 	}
 }
