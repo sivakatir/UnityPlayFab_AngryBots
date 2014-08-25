@@ -15,9 +15,21 @@ namespace PlayFab{
 
 		public static string TitleId { get; set; }
 		public static string CatalogVersion { get; set; }
-		public static string AuthKey { get; set; }
+
+		private static string _AuthKey;
+		public static string AuthKey {  
+			get { return _AuthKey; }
+			set
+			{
+				_AuthKey = value;
+				if (LoggedIn != null) LoggedIn(value);
+			} 
+		}
+		public static event LoggedInEventHandler LoggedIn;
+
 		public static bool AngryBotsModActivated { get; set; }
 		public static bool KeepSessionKey { get; set; }
+		public static bool SkipLogin { get; set; }
 
 		/// 		SAVE % LOAD GAME DATA
 
@@ -67,6 +79,7 @@ namespace PlayFab{
 			CatalogVersion = data.CatalogVersion;
 			AngryBotsModActivated = data.AngryBotsModActivated;
 			KeepSessionKey = data.KeepSessionKey;
+			SkipLogin = data.KeepSessionKey;
 			if(KeepSessionKey && PlayFabClientAPI.AuthKey==null &&  data.AuthKey!=null)
 				PlayFabClientAPI.AuthKey = AuthKey = data.AuthKey;
 			else if(KeepSessionKey && PlayFabClientAPI.AuthKey!=null &&  data.AuthKey==null)
@@ -89,6 +102,7 @@ namespace PlayFab{
 			data.CatalogVersion = CatalogVersion;
 			data.AngryBotsModActivated = AngryBotsModActivated;
 			data.KeepSessionKey = KeepSessionKey;
+			data.SkipLogin = SkipLogin;
 			if (KeepSessionKey && PlayFabClientAPI.AuthKey != null)
 				data.AuthKey = AuthKey = PlayFabClientAPI.AuthKey;
 			bf.Serialize (file,data);
@@ -96,6 +110,9 @@ namespace PlayFab{
 		}
 	}
 }
+
+public delegate void LoggedInEventHandler(string value);
+
 [Serializable]
 public class PlayfabGameData 
 {
@@ -103,5 +120,6 @@ public class PlayfabGameData
 	public string CatalogVersion;
 	public bool AngryBotsModActivated;
 	public bool KeepSessionKey;
+	public bool SkipLogin;
 	public string AuthKey;
 }

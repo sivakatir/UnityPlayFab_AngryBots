@@ -35,6 +35,9 @@ namespace PlayFab.Examples{
 		// if we are in "login" state, draw the login window on screen
 		void OnGUI () {
 			if (PlayFabGameBridge.gameState == 2) {
+				if(PlayFabData.SkipLogin && PlayFabData.AuthKey != null){
+					PlayFabGameBridge.gameState = 3;
+				}
 				Time.timeScale = 0.0f;	// pause everything while we show the UI
 
 				Rect winRect = new Rect (0,0,playfabBackground.width, playfabBackground.height);
@@ -96,6 +99,7 @@ namespace PlayFab.Examples{
 			PlayFabGameBridge.gameState = 3;	// switch to playing the game; hide this dialog
 			Time.timeScale = 1.0f;	// unpause...
 			Application.LoadLevel (nextScene);
+			PlayFabData.AuthKey = PlayFabClientAPI.AuthKey;
 
 			//if(PlayFabData.AngryBotsModActivated)Application.LoadLevel ("Default"); // load the first level
 			//else Application.LoadLevel (nextScene);
