@@ -14,7 +14,6 @@ static function ResetHealthOnAll () {
 	for (var health : Health in healthObjects) {
 		health.enabled = true;
 		health.dead = false;
-		health.health = health.maxHealth;
-		PlayFabGameBridge.playerHealth = Mathf.Ceil(health.health);
+		health.health = PlayFabGameBridge.playerHealth = Mathf.Ceil(health.maxHealth);
 	}	
 }	

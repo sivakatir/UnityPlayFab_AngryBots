@@ -43,7 +43,7 @@ function Awake () {
 		scorchMark.SetActive (false);
 	}
 	if (gameObject.layer==LayerMask.NameToLayer("Player"))
-		PlayFabGameBridge.playerHealth = health;
+		health = PlayFabGameBridge.playerHealth;
 }
 
 function OnDamage (amount : float, fromDirection : Vector3) {
@@ -144,7 +144,7 @@ function Regenerate () {
 	if (regenerateSpeed > 0.0f) {
 		while (enabled) {
 			if (Time.time > lastDamageTime + 3) {
-				PlayFabGameBridge.playerHealth = health += regenerateSpeed;
+				health = PlayFabGameBridge.playerHealth += regenerateSpeed;
 				
 				yield;
 
@@ -152,7 +152,7 @@ function Regenerate () {
 					health = PlayFabGameBridge.playerHealth = maxHealth;
 					enabled = false;
 				}
-				PlayFabGameBridge.playerHealth = health;
+				health = PlayFabGameBridge.playerHealth;
 			}
 			yield WaitForSeconds (1.0f);
 		}
