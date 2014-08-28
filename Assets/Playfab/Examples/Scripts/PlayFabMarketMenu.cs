@@ -48,11 +48,14 @@ namespace PlayFab.Examples{
 			icons.Add ("gun3", gun3);
 			icons.Add ("crate", crate);
 
+			if (PlayFabData.AuthKey != null)LoadMarketMenu ();
+			else PlayFabData.LoggedIn += LoadMarketMenu;
+		}
+
+		private void LoadMarketMenu(string authKey = null){
 			GetCatalogItemsRequest request = new GetCatalogItemsRequest();
 			request.CatalogVersion = PlayFabData.CatalogVersion;
-			if (PlayFabData.AuthKey != null)
-				PlayFabClientAPI.GetCatalogItems (request,ConstructCatalog,OnPlayFabError);
-			//Time.timeScale = 0;
+			PlayFabClientAPI.GetCatalogItems (request,ConstructCatalog,OnPlayFabError);
 		}
 		
 		void OnGUI () {
@@ -122,7 +125,7 @@ namespace PlayFab.Examples{
 					Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,cursor.width,cursor.height );
 					GUI.DrawTexture (cursorRect, cursor);
 					PlayFabGameBridge.mouseOverGui = true;
-				}
+				}else PlayFabGameBridge.mouseOverGui = false;
 			}
 		}
 

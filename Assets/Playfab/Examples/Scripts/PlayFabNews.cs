@@ -23,11 +23,14 @@ namespace PlayFab.Examples{
 
 		// Use this for initialization
 		void Start () {
+			if (PlayFabData.AuthKey != null)LoadNews ();
+			else PlayFabData.LoggedIn += LoadNews;
+		}	
+		private void LoadNews(string authKey = null){
 			GetTitleNewsRequest request = new GetTitleNewsRequest ();
 			request.Count = Convert.ToInt32(newsToLoad);
-			if (PlayFabData.AuthKey != null)
-				PlayFabClientAPI.GetTitleNews (request, OnNewsResult, OnPlayFabError);
-		}	
+			PlayFabClientAPI.GetTitleNews (request, OnNewsResult, OnPlayFabError);
+		}
 
 		private void OnNewsResult(GetTitleNewsResult result){
 			news = result.News;
@@ -99,7 +102,7 @@ namespace PlayFab.Examples{
 					Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,cursor.width,cursor.height );
 					GUI.DrawTexture (cursorRect, cursor);
 					PlayFabGameBridge.mouseOverGui = true;
-				}
+				}else PlayFabGameBridge.mouseOverGui = false;
 			}
 		}
 	}

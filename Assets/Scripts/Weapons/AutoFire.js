@@ -67,7 +67,6 @@ function Update () {
 				PlayFabGameBridge.consumeItem(PlayFabGameBridge.currentGunName);
 		}
 	}
-	PlayFabGameBridge.mouseOverGui = false;	// should be called right before we check	
 }
 var canShoot : boolean;
 function OnStartFire () {

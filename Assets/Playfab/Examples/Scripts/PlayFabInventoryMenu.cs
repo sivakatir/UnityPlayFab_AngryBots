@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using PlayFab;
 
 public class PlayFabInventoryMenu : PlayFabItemsController {
 
@@ -17,11 +18,14 @@ public class PlayFabInventoryMenu : PlayFabItemsController {
 	private int totalWidth = 1;
 	private bool healthItemPressed = false;
 
+	// This prefab class is custumized to work with the Angry Bots Demo. Use its extended class for generic approach.
+
 	public void Start(){
 		itemTextures = new List<Texture2D>(new Texture2D[] { item1,item2,item3,item4 });
 		itemSelectedTextures = new List<Texture2D>(new Texture2D[] { item1Selected,item2Selected,item3Selected,item4Selected });
 		textureWidth = itemTextures[0].width;
-		UpdateInventory ();
+		if (PlayFabData.AuthKey != null) UpdateInventory ();
+		else PlayFabData.LoggedIn += UpdateInventory;
 		if(autoUpdateConsumeItems)InvokeRepeating("ConsumeNow", 0, UpdateEverySeconds);
 	}
 

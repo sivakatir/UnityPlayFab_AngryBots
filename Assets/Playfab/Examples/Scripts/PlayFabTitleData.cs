@@ -10,8 +10,13 @@ namespace PlayFab.Examples{
 		public static bool PlayFabTitleDataLoaded = false;
 		public static Dictionary<string,string> Data ;
 
-		// Use this for initialization
 		void Start () {
+			if (PlayFabData.AuthKey != null)LoadTitleData ();
+			else PlayFabData.LoggedIn += LoadTitleData;
+
+		}
+
+		private void LoadTitleData(string authKey = null){
 			GetTitleDataRequest request = new GetTitleDataRequest ();
 			List<string> keys = new List<string> ();
 			keys.Add ("connectionlost");
@@ -20,10 +25,9 @@ namespace PlayFab.Examples{
 			keys.Add ("icon_health");
 			keys.Add ("icon_kill");
 			request.Keys = keys;
-			if (PlayFabData.AuthKey != null)
-				PlayFabClientAPI.GetTitleData (request, OnTitleData, OnPlayFabError);
-		}
+			PlayFabClientAPI.GetTitleData (request, OnTitleData, OnPlayFabError);
 
+		}
 		private void OnTitleData( GetTitleDataResult result){
 			Data = result.Data;
 			PlayFabTitleDataLoaded = true;

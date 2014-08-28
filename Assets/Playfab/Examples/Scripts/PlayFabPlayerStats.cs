@@ -28,13 +28,16 @@ namespace PlayFab.Examples{
 		}
 
 		public void Start() {
-			GetUserDataRequest request = new GetUserDataRequest ();
-			if (PlayFabData.AuthKey != null)
-				PlayFabClientAPI.GetUserData (request, LoadPlayerData, OnPlayFabError);
+			if (PlayFabData.AuthKey != null)LoadUserData ();
+			else PlayFabData.LoggedIn += LoadUserData;
 			InvokeRepeating("SavePlayerState", 10, 10);
 		}
+		private void LoadUserData(string authKey = null){
+			GetUserDataRequest request = new GetUserDataRequest ();
+			PlayFabClientAPI.GetUserData (request, SetPlayerData, OnPlayFabError);
+		}
 
-		private void LoadPlayerData(GetUserDataResult result)
+		private void SetPlayerData(GetUserDataResult result)
 		{
 			Debug.Log ("Player data loaded.");
 			if (result.Data.ContainsKey ("TotalKills"))	

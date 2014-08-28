@@ -101,10 +101,8 @@ namespace PlayFab.Examples{
 			PlayFabGameBridge.gameState = 3;	// switch to playing the game; hide this dialog
 			Time.timeScale = 1.0f;	// unpause...
 			PlayFabData.AuthKey = result.SessionTicket;
-			Application.LoadLevel (nextScene);
+			if(!PlayFabData.AngryBotsModActivated)Application.LoadLevel (nextScene);
 
-			//if(PlayFabData.AngryBotsModActivated)Application.LoadLevel ("Default"); // load the first level
-			//else Application.LoadLevel (nextScene);
 		}
 
 		// callback function if there is an error -- display appropriate error message

@@ -19,25 +19,24 @@ namespace PlayFab.Examples{
 
 		private Dictionary<string,uint> LeaderboardHighScores = new Dictionary<string,uint>() ;
 
-		// Use this for initialization
 		void Start () {
-			refreshLeaderboard ();
 			leaderboardLoaded = false;
+			if (PlayFabData.AuthKey != null)refreshLeaderboard ();
+			else PlayFabData.LoggedIn += refreshLeaderboard;
 		}
 
-		public void refreshLeaderboard() {
+		public void refreshLeaderboard(string authKey = null) {
 			PlayFab.ClientModels.GetLeaderboardRequest request = new PlayFab.ClientModels.GetLeaderboardRequest ();
 			request.MaxResultsCount = 50;
 			request.StatisticName = "Score";
-			if (PlayFabData.AuthKey != null)
+
 				PlayFabClientAPI.GetLeaderboard (request, ConstructLeaderboard, OnPlayFabError);
 		}
 
-		// Update is called once per frame
 		void OnGUI () {
 			if (leaderboardLoaded) {
 
-				Rect leaderboardIconRect = new Rect (Screen.width-iconSpace -Icon.width,Screen.height-iconSpace-Icon.height,Icon.width,Icon.height );
+				Rect leaderboardIconRect = new Rect (Screen.width-iconSpace -(Icon.width/1.5f),Screen.height-iconSpace-(Icon.height/1.5f),(Icon.width/1.5f),(Icon.height/1.5f) );
 				if (GUI.Button (leaderboardIconRect, Icon,GUIStyle.none)) {
 					showLeaderboard = !showLeaderboard;
 					Time.timeScale = !showLeaderboard ? 1.0f : 0.0f;
@@ -84,49 +83,19 @@ namespace PlayFab.Examples{
 					Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,Cursor.width,Cursor.height );
 					GUI.DrawTexture (cursorRect, Cursor);
 					PlayFabGameBridge.mouseOverGui = true;
-				}
+				}else PlayFabGameBridge.mouseOverGui = false;
 			}
 		}
 
 		private void ConstructLeaderboard (PlayFab.ClientModels.GetLeaderboardResult result)
 		{
 			LeaderboardHighScores.Clear ();
-
 			foreach (PlayFab.ClientModels.PlayerLeaderboardEntry entry in result.Leaderboard) {
 				if (entry.DisplayName != null)
 					LeaderboardHighScores.Add (entry.DisplayName, (uint)entry.StatValue); 
 				else
 					LeaderboardHighScores.Add (entry.PlayFabId, (uint)entry.StatValue); 
 			}
-
-/*			LeaderboardHighScores.Add ("ueryetyu",89); 
-			LeaderboardHighScores.Add ("qewyqey",88); 
-			LeaderboardHighScores.Add ("ddarhddd",50); 
-			LeaderboardHighScores.Add ("eewetheee dgld",49); 
-			LeaderboardHighScores.Add ("arhadh",47); 
-			LeaderboardHighScores.Add ("byeryj",30); 
-			LeaderboardHighScores.Add ("kfjlcl",39); 
-			LeaderboardHighScores.Add ("fjlfhl dfgjlfhj",37); 
-			LeaderboardHighScores.Add ("adasdfhht",90); 
-			LeaderboardHighScores.Add ("uexvb rasdfyetyu",89); 
-			LeaderboardHighScores.Add ("qeasdfwyqey",88); 
-			LeaderboardHighScores.Add ("da bb xvvsdfdarhddd",50); 
-			LeaderboardHighScores.Add ("eeasdfwetheee dgld",49); 
-			LeaderboardHighScores.Add ("arab sdghadh",47); 
-			LeaderboardHighScores.Add ("byfgb beryj",30); 
-			LeaderboardHighScores.Add ("kfxsxvb dxvgbjlcl",39); 
-			LeaderboardHighScores.Add ("fjfxb gblfhl dfgjlfhj",37); 
-			LeaderboardHighScores.Add ("adfxb dnhht",90); 
-			LeaderboardHighScores.Add ("ufdg eryetyu",89); 
-			LeaderboardHighScores.Add ("qedcx fgnwyqey",88); 
-			LeaderboardHighScores.Add ("dddfgnarhddd",50); 
-			LeaderboardHighScores.Add ("eeadfwetheee dgld",49); 
-			LeaderboardHighScores.Add ("ab rhadh",47); 
-			LeaderboardHighScores.Add ("bybxc eryj",30); 
-			LeaderboardHighScores.Add ("kfjdaflcl",39); 
-			LeaderboardHighScores.Add ("fjcxblfhl dfgjlfhj",37); 
-*/
-
 			leaderboardLoaded = true;
 		}
 

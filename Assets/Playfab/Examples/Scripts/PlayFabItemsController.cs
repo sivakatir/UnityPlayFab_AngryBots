@@ -15,8 +15,7 @@ public class PlayFabItemsController : SingletonMonoBehaviour<PlayFabItemsControl
 
 
 	public static bool InventoryLoaded = false;
-	public void UpdateInventory(){
-		if (PlayFabData.AuthKey != null)
+	public void UpdateInventory(string authKey = null){
 			PlayFabClientAPI.GetUserInventory (new GetUserInventoryRequest(),OnGetUserInventory, OnPlayFabError);
 	}
 

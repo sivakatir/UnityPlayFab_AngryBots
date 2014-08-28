@@ -80,9 +80,8 @@ namespace PlayFab{
 			AngryBotsModActivated = data.AngryBotsModActivated;
 			KeepSessionKey = data.KeepSessionKey;
 			SkipLogin = data.SkipLogin;
-			Debug.Log ("Keep session: " + KeepSessionKey);
-			Debug.Log ("api auth key: " + PlayFabClientAPI.AuthKey);
-			Debug.Log ("data.auth key: " + data.AuthKey);
+			Debug.Log ("AngryBotsModActivated " + AngryBotsModActivated);
+
 			if (KeepSessionKey && PlayFabClientAPI.AuthKey == null && data.AuthKey != null) {
 				PlayFabClientAPI.AuthKey = AuthKey = data.AuthKey;
 				Debug.Log ("Retrieved auth key: " + AuthKey);
