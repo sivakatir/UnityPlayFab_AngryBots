@@ -28,6 +28,7 @@ namespace PlayFab.Editor
 			titleId = PlayFabData.TitleId;
 			catalogVersion = PlayFabData.CatalogVersion;
 			keepSessionKey = PlayFabData.KeepSessionKey;
+			skipLogin = PlayFabData.SkipLogin;
 			angryBotsModActivated = PlayFabData.AngryBotsModActivated;
 			ListFiles();
 			pfLogo = (Texture2D)Resources.LoadAssetAtPath ("Assets/Playfab/Editor/PlayFablogo.png", typeof(Texture2D));
@@ -86,6 +87,7 @@ namespace PlayFab.Editor
 			PlayFabData.CatalogVersion = catalogVersion;
 			PlayFabData.KeepSessionKey = keepSessionKey;
 			PlayFabData.AngryBotsModActivated = angryBotsModActivated;
+			PlayFabData.SkipLogin = skipLogin;
 			PlayFabData.SaveData ();
             AssetDatabase.Refresh ();
 		}

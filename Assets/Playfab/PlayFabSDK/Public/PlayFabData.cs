@@ -79,9 +79,14 @@ namespace PlayFab{
 			CatalogVersion = data.CatalogVersion;
 			AngryBotsModActivated = data.AngryBotsModActivated;
 			KeepSessionKey = data.KeepSessionKey;
-			SkipLogin = data.KeepSessionKey;
-			if(KeepSessionKey && PlayFabClientAPI.AuthKey==null &&  data.AuthKey!=null)
+			SkipLogin = data.SkipLogin;
+			Debug.Log ("Keep session: " + KeepSessionKey);
+			Debug.Log ("api auth key: " + PlayFabClientAPI.AuthKey);
+			Debug.Log ("data.auth key: " + data.AuthKey);
+			if (KeepSessionKey && PlayFabClientAPI.AuthKey == null && data.AuthKey != null) {
 				PlayFabClientAPI.AuthKey = AuthKey = data.AuthKey;
+				Debug.Log ("Retrieved auth key: " + AuthKey);
+			}
 			else if(KeepSessionKey && PlayFabClientAPI.AuthKey!=null &&  data.AuthKey==null)
 				SaveData();
 		}
