@@ -57,7 +57,7 @@ namespace PlayFab.Examples{
 			request.CatalogVersion = PlayFabData.CatalogVersion;
 			PlayFabClientAPI.GetCatalogItems (request,ConstructCatalog,OnPlayFabError);
 		}
-		
+
 		void OnGUI () {
 			if(renderCatalog){
 				Rect marketIconRect = new Rect (iconsSpace,Screen.height-marketIcon.height-iconsSpace,marketIcon.width,marketIcon.height );
@@ -125,7 +125,7 @@ namespace PlayFab.Examples{
 					Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,cursor.width,cursor.height );
 					GUI.DrawTexture (cursorRect, cursor);
 					PlayFabGameBridge.mouseOverGui = true;
-				}else PlayFabGameBridge.mouseOverGui = false;
+				}
 			}
 		}
 
@@ -146,11 +146,13 @@ namespace PlayFab.Examples{
 
 			itemIcons = new Dictionary<string, Texture2D> ();
 
+			PlayFabGameBridge.itemNames = new List<string> ();
 			// construct the default gun type
 			PlayFabGameBridge.gunNames = new List<string> ();
 			PlayFabGameBridge.gunTypes = new Dictionary<string,Gun> ();
 
 			PlayFabGameBridge.currentGunName = "Default";
+			PlayFabGameBridge.itemNames.Add (PlayFabGameBridge.currentGunName);
 			PlayFabGameBridge.gunNames.Add (PlayFabGameBridge.currentGunName);
 			PlayFabGameBridge.gunTypes.Add (PlayFabGameBridge.currentGunName, new Gun{Frequency=10.0F, ConeAngle=1.5F, DamagePerSecond=20.0F, HitSoundVolume=0.5F, Pitch=1.0F});	// default gun
 			PlayFabGameBridge.currentGun = PlayFabGameBridge.gunTypes [PlayFabGameBridge.currentGunName];
@@ -171,6 +173,7 @@ namespace PlayFab.Examples{
 					PlayFabGameBridge.gunNames.Add (newGunName);
 					PlayFabGameBridge.gunTypes.Add (newGunName, newGun);
 				}
+				if(!PlayFabGameBridge.itemNames.Contains(items[x].ItemClass)&&!items [x].ItemClass.StartsWith("GearBundle"))PlayFabGameBridge.itemNames.Add(items [x].ItemClass);
 			}
 			Time.timeScale = 1;
 		}

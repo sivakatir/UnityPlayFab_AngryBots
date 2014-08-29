@@ -20,6 +20,7 @@ public class PlayFabGameBridge : MonoBehaviour{
 
 	public static uint gameState = 2; // Can be used for game progress
 
+	public static List<string> itemNames;
 	public static Dictionary<string,Gun> gunTypes;
 	public static List<string> gunNames;
 	public static Gun currentGun = new Gun{Frequency=10.0F, ConeAngle=1.5F, DamagePerSecond=20.0F, HitSoundVolume=0.5F, Pitch=1.0F};
