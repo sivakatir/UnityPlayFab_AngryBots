@@ -41,8 +41,13 @@ public class PlayFabInventoryMenu : PlayFabItemsController {
 				uint? num = 0;
 				if (i > 1) // because item 1 has infinite ammo
 				{
-					if((i-1)>=PlayFabGameBridge.gunNames.Count &&PlayFabGameBridge.consumableItems.ContainsKey("HealthPack:Partial")){
-						num = PlayFabGameBridge.consumableItems["HealthPack:Partial"];
+					if((i-1)>=PlayFabGameBridge.gunNames.Count)
+					{
+						if (PlayFabGameBridge.consumableItems.ContainsKey("HealthPack:Partial")) {
+							num = PlayFabGameBridge.consumableItems["HealthPack:Partial"];
+						} else {
+							num = 0;
+						}
 					}
 					else if(PlayFabGameBridge.consumableItems.ContainsKey(PlayFabGameBridge.gunNames[i-1])){
 						num = PlayFabGameBridge.consumableItems[PlayFabGameBridge.gunNames[i-1]];

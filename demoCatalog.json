@@ -1,10 +1,10 @@
 {
-  "CatalogVersion": "2",
+  "CatalogVersion": "1",
   "Catalog": [
     {
       "ItemId": "health_pack_2",
       "ItemClass": "HealthPack:Partial",
-      "CatalogVersion": "2",
+      "CatalogVersion": "1",
       "DisplayName": "HEALTH PACKS",
       "Description": "2 Health Packs",
       "VirtualCurrencyPrices": {
@@ -20,7 +20,7 @@
     {
       "ItemId": "health_pack_1",
       "ItemClass": "HealthPack:Partial",
-      "CatalogVersion": "2",
+      "CatalogVersion": "1",
       "DisplayName": "HEALTH PACKS",
       "Description": "5 Health Packs",
       "VirtualCurrencyPrices": {
@@ -36,7 +36,7 @@
     {
       "ItemId": "ammo_pack_1",
       "ItemClass": "AmmoPack:Burst",
-      "CatalogVersion": "2",
+      "CatalogVersion": "1",
       "DisplayName": "BURST AMMO",
       "Description": "400 Ammo",
       "VirtualCurrencyPrices": {
@@ -47,12 +47,12 @@
       "Consumable": {
         "UsageCount": 400
       },
-      "CustomData": "{\"Frequency\":20,\"ConeAngle\":5,\"DamagePerSecond\":80,\"HitSoundVolume\":10,\"Pitch\":3,\"Icon\":\"gun2\"}"
+      "CustomData": "{\"Frequency\":30,\"ConeAngle\":5,\"DamagePerSecond\":80,\"HitSoundVolume\":10,\"Pitch\":4,\"Icon\":\"gun2\"}"
     },
     {
       "ItemId": "ammo_pack_2",
       "ItemClass": "AmmoPack:Cannon",
-      "CatalogVersion": "2",
+      "CatalogVersion": "1",
       "DisplayName": "CANNON AMMO",
       "Description": "10 Ammo",
       "VirtualCurrencyPrices": {
@@ -68,7 +68,7 @@
     {
       "ItemId": "war_pack_1",
       "ItemClass": "GearBundle",
-      "CatalogVersion": "2",
+      "CatalogVersion": "1",
       "DisplayName": "WAR PACK",
       "Description": "400 Burst\r\n10 Canon\r\n2 Health Packs",
       "VirtualCurrencyPrices": {
