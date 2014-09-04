@@ -18,7 +18,7 @@ namespace PlayFab.Examples{
 		public string invalidPassword = "Password is invalid (6-24 characters).";
 		public string invalidUsername = "Username is invalid (3-24 characters).";
 		public string wrongPassword = "Wrong password for that user.";
-		public string loginCancled = "Facebook login was cancled.";
+		public string loginCanceled = "Facebook login was canceled.";
 
 		private string errorLabel = "";
 		private GUIStyle errorLabelStyle = new GUIStyle();
@@ -129,7 +129,7 @@ namespace PlayFab.Examples{
 				request.TitleId = PlayFabData.TitleId;
 				PlayFabClientAPI.LoginWithFacebook(request, OnLoginResult, OnPlayFabError);
 			} else {
-				errorLabel = loginCancled;
+				errorLabel = loginCanceled;
 			}
 		}
 
