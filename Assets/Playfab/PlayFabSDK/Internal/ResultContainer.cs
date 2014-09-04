@@ -23,6 +23,7 @@ namespace PlayFab.Internal
 			if(errorStr != null)
 			{
 				error = new PlayFabError();
+				error.ErrorMessage = errorStr;
 				if(PlayFabSettings.GlobalErrorHandler != null)
 					PlayFabSettings.GlobalErrorHandler(error);
 				return;
