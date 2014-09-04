@@ -89,14 +89,15 @@ namespace PlayFab.Examples{
 						if(!PlayFabData.AngryBotsModActivated)Application.LoadLevel (previousScene);
 					}
 
-					// Facebook login only works web deployed as a Facebook canvas app,
+					// Facebook login only works on Facebook canvas,
 					// iOS, Androind, or in the Editor where it does a dummy login.
 #if UNITY_EDITOR || UNITY_WEBPLAYER || UNITY_IPHONE || UNITY_ANDROID
 					// TODO: Cursor is BEHIND the Facebook login prompt, at least in the editor.
 					if (GUI.Button(new Rect(winRect.x+18, yStart+215, 140, 30),"Login With Facebook"))
 					{
 						Debug.Log ("Facebook login clicked");
-						if(!FB.IsLoggedIn){
+						if(!FB.IsLoggedIn)
+						{
 							FB.Login("email,publish_actions", FacebookAuthCallback); 
 						}
 					}
@@ -133,7 +134,7 @@ namespace PlayFab.Examples{
 		}
 
 		// callback function if player login is successful
-		public void OnLoginResult(LoginResult result){
+		void OnLoginResult(LoginResult result){
 			PlayFabGameBridge.gameState = 3;	// switch to playing the game; hide this dialog
 			Time.timeScale = 1.0f;	// unpause...
 			PlayFabData.AuthKey = result.SessionTicket;
@@ -172,7 +173,7 @@ namespace PlayFab.Examples{
 			}
 		}
 	    
-		// Call back for Facebook Canvas login
+		// Callback for Facebook Canvas login
 		private void OnHideUnity(bool isGameShown)                                                   
 		{                                                                                            
 			Debug.Log("OnHideUnity");                                                              
