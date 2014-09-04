@@ -7,7 +7,7 @@ using PlayFab.ClientModels;
 namespace PlayFab.Examples{
 	public class PlayFabLoginUser : MonoBehaviour{
 
-		public string title = "User Login";
+		public string title = "Login Or Registers";
 		public string userNameLabel = "User Name";
 		public string passwordLabel = "Password";
 		public string nextScene = "PF_PurchaseScene";
@@ -18,6 +18,7 @@ namespace PlayFab.Examples{
 		public string invalidPassword = "Password is invalid (6-24 characters).";
 		public string invalidUsername = "Username is invalid (3-24 characters).";
 		public string wrongPassword = "Wrong password for that user.";
+		public string loginCancled = "Facebook login was cancled.";
 
 		private string errorLabel = "";
 		private GUIStyle errorLabelStyle = new GUIStyle();
@@ -30,6 +31,7 @@ namespace PlayFab.Examples{
 
 		private void Start (){
 			errorLabelStyle.normal.textColor = Color.red;
+			FB.Init(FacebookOnInitComplete);
 		}
 
 		// if we are in "login" state, draw the login window on screen
@@ -81,18 +83,42 @@ namespace PlayFab.Examples{
 					}
 
 					// if the player wants to register a new account instead, flip to the "register" dialog
-					if (GUI.Button(new Rect(winRect.x+18, yStart+175, 120, 20),"Register"))
+					if (GUI.Button(new Rect(winRect.x+18, yStart+175, 120, 30),"Register"))
 					{
 						PlayFabGameBridge.gameState = 1;
 						if(!PlayFabData.AngryBotsModActivated)Application.LoadLevel (previousScene);
 					}
 
+					if (GUI.Button(new Rect(winRect.x+18, yStart+215, 140, 30),"Login With Facebook"))
+					{
+						FB.Login("", FacebookAuthCallback);
+					}
 
 					if (Input.mousePosition.x < winRect.x + winRect.width && Input.mousePosition.x > winRect.x && Screen.height - Input.mousePosition.y < winRect.y + winRect.height && Screen.height - Input.mousePosition.y > winRect.y){
 						Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,cursor.width,cursor.height );
 						GUI.DrawTexture (cursorRect, cursor);
 					}
 				}
+			}
+		}
+
+		void FacebookOnInitComplete()
+		{
+			// Add any additional code needed for when FB.Init() is complete.
+		}
+
+		// facebook login callback function
+		void FacebookAuthCallback(FBResult result)
+		{
+			Debug.Log (result);
+			if (FB.IsLoggedIn) {
+				LoginWithFacebookRequest request = new LoginWithFacebookRequest();
+				request.AccessToken = FB.AccessToken;
+				request.CreateAccount = true;
+				request.TitleId = PlayFabData.TitleId;
+				PlayFabClientAPI.LoginWithFacebook(request, OnLoginResult, OnPlayFabError);
+			} else {
+				errorLabel = loginCancled;
 			}
 		}
 
