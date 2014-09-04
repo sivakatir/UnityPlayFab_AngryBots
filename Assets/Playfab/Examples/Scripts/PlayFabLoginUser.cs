@@ -96,9 +96,17 @@ namespace PlayFab.Examples{
 					if (GUI.Button(new Rect(winRect.x+18, yStart+215, 140, 30),"Login With Facebook"))
 					{
 						Debug.Log ("Facebook login clicked");
+						Debug.Log ("Facebook SDK State: " + FB.IsInitialized);
+						Debug.Log ("Facebook User State: " + FB.IsLoggedIn);
 						if(!FB.IsLoggedIn)
 						{
+							Debug.Log ("Calling Facebook Login");
 							FB.Login("email,publish_actions", FacebookAuthCallback); 
+						}
+						else
+						{
+							Debug.Log ("Calling PlayFab Login Facebook User");
+							CallFacebookLogin();
 						}
 					}
 #endif
@@ -121,16 +129,21 @@ namespace PlayFab.Examples{
 		void FacebookAuthCallback(FBResult result)
 		{
 			if (FB.IsLoggedIn) {
-				LoginWithFacebookRequest request = new LoginWithFacebookRequest();
-				request.AccessToken = FB.AccessToken;
-				// auto create account if one not found. setting to 
-				// false for new users will generate an error.
-				request.CreateAccount = true;
-				request.TitleId = PlayFabData.TitleId;
-				PlayFabClientAPI.LoginWithFacebook(request, OnLoginResult, OnPlayFabError);
+				CallFacebookLogin();
 			} else {
 				errorLabel = loginCanceled;
 			}
+		}
+
+		void CallFacebookLogin()
+		{
+			LoginWithFacebookRequest request = new LoginWithFacebookRequest();
+			request.AccessToken = FB.AccessToken;
+			// auto create account if one not found. setting to 
+			// false for new users will generate an error.
+			request.CreateAccount = true;
+			request.TitleId = PlayFabData.TitleId;
+			PlayFabClientAPI.LoginWithFacebook(request, OnLoginResult, OnPlayFabError);
 		}
 
 		// callback function if player login is successful

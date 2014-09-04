@@ -104,7 +104,8 @@ namespace PlayFab.Examples{
 				
 				Rect moneyRect = new Rect (winRect.x, killsRect.y+killsRect.height+4, kills.width, kills.height);
 				GUI.DrawTexture (moneyRect, money);
-				
+
+				// TODO: Validate dictionary to prevent dictionary key not found exception
 				GUI.Label (new Rect (moneyRect.x + moneyRect.width + 4, moneyRect.y+kills.height*0.5f, 80, 80), "<size=18>"+PlayFabItemsController.VirtualCurrency["GC"]+"</size>");
 				GUI.skin.label.alignment = TextAnchor.UpperLeft;
 				if(PlayFabTitleData.PlayFabTitleDataLoaded){
