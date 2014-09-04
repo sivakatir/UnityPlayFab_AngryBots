@@ -165,22 +165,7 @@ namespace PlayFab.Examples{
 				errorLabel = "Unknown Error.";
 			}
 		}
-
-		private void SetInit()                                                                       
-		{                                                                                            
-			Debug.Log("SetInit");                                                                  
-			enabled = true; // "enabled" is a property inherited from MonoBehaviour                  
-			if (FB.IsLoggedIn)                                                                       
-			{                                                                                        
-				Debug.Log("Already logged in");                                                    
-				LoginWithFacebookRequest request = new LoginWithFacebookRequest();
-				request.AccessToken = FB.AccessToken;
-				request.CreateAccount = true;
-				request.TitleId = PlayFabData.TitleId;
-				PlayFabClientAPI.LoginWithFacebook(request, OnLoginResult, OnPlayFabError);                                                                        
-			}                                                                                        
-		}                                                                                            
-		
+	                                                                                       
 		private void OnHideUnity(bool isGameShown)                                                   
 		{                                                                                            
 			Debug.Log("OnHideUnity");                                                              
