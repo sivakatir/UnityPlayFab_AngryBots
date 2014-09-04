@@ -89,6 +89,10 @@ namespace PlayFab.Examples{
 						if(!PlayFabData.AngryBotsModActivated)Application.LoadLevel (previousScene);
 					}
 
+					// Facebook login only works web deployed as a Facebook canvas app,
+					// iOS, Androind, or in the Editor where it does a dummy login.
+#if UNITY_EDITOR || UNITY_WEBPLAYER || UNITY_IPHONE || UNITY_ANDROID
+					// TODO: Cursor is BEHIND the Facebook login prompt, at least in the editor.
 					if (GUI.Button(new Rect(winRect.x+18, yStart+215, 140, 30),"Login With Facebook"))
 					{
 						Debug.Log ("Facebook login clicked");
@@ -96,6 +100,7 @@ namespace PlayFab.Examples{
 							FB.Login("email,publish_actions", FacebookAuthCallback); 
 						}
 					}
+#endif
 
 					if (Input.mousePosition.x < winRect.x + winRect.width && Input.mousePosition.x > winRect.x && Screen.height - Input.mousePosition.y < winRect.y + winRect.height && Screen.height - Input.mousePosition.y > winRect.y){
 						Rect cursorRect = new Rect (Input.mousePosition.x,Screen.height-Input.mousePosition.y,cursor.width,cursor.height );
@@ -108,16 +113,17 @@ namespace PlayFab.Examples{
 		void FacebookOnInitComplete()
 		{
 			// Add any additional code needed for when FB.Init() is complete.
-			errorLabel = "FB Init Complete.";
+			// You can enable auto login with facebook here if desired by checking FB.IsLoggedIn == true
 		}
 
 		// facebook login callback function
 		void FacebookAuthCallback(FBResult result)
 		{
-			Debug.Log (result);
 			if (FB.IsLoggedIn) {
 				LoginWithFacebookRequest request = new LoginWithFacebookRequest();
 				request.AccessToken = FB.AccessToken;
+				// auto create account if one not found. setting to 
+				// false for new users will generate an error.
 				request.CreateAccount = true;
 				request.TitleId = PlayFabData.TitleId;
 				PlayFabClientAPI.LoginWithFacebook(request, OnLoginResult, OnPlayFabError);
@@ -165,7 +171,8 @@ namespace PlayFab.Examples{
 				errorLabel = "Unknown Error.";
 			}
 		}
-	                                                                                       
+	    
+		// Call back for Facebook Canvas login
 		private void OnHideUnity(bool isGameShown)                                                   
 		{                                                                                            
 			Debug.Log("OnHideUnity");                                                              
