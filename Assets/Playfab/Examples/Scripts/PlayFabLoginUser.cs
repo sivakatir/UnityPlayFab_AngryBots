@@ -91,7 +91,10 @@ namespace PlayFab.Examples{
 
 					if (GUI.Button(new Rect(winRect.x+18, yStart+215, 140, 30),"Login With Facebook"))
 					{
-						FB.Login("", FacebookAuthCallback);
+						Debug.Log ("Facebook login clicked");
+						if(!FB.IsLoggedIn){
+							FB.Login("email,publish_actions", FacebookAuthCallback); 
+						}
 					}
 
 					if (Input.mousePosition.x < winRect.x + winRect.width && Input.mousePosition.x > winRect.x && Screen.height - Input.mousePosition.y < winRect.y + winRect.height && Screen.height - Input.mousePosition.y > winRect.y){
@@ -105,6 +108,7 @@ namespace PlayFab.Examples{
 		void FacebookOnInitComplete()
 		{
 			// Add any additional code needed for when FB.Init() is complete.
+			errorLabel = "FB Init Complete.";
 		}
 
 		// facebook login callback function
@@ -161,5 +165,35 @@ namespace PlayFab.Examples{
 				errorLabel = "Unknown Error.";
 			}
 		}
+
+		private void SetInit()                                                                       
+		{                                                                                            
+			Debug.Log("SetInit");                                                                  
+			enabled = true; // "enabled" is a property inherited from MonoBehaviour                  
+			if (FB.IsLoggedIn)                                                                       
+			{                                                                                        
+				Debug.Log("Already logged in");                                                    
+				LoginWithFacebookRequest request = new LoginWithFacebookRequest();
+				request.AccessToken = FB.AccessToken;
+				request.CreateAccount = true;
+				request.TitleId = PlayFabData.TitleId;
+				PlayFabClientAPI.LoginWithFacebook(request, OnLoginResult, OnPlayFabError);                                                                        
+			}                                                                                        
+		}                                                                                            
+		
+		private void OnHideUnity(bool isGameShown)                                                   
+		{                                                                                            
+			Debug.Log("OnHideUnity");                                                              
+			if (!isGameShown)                                                                        
+			{                                                                                        
+				// pause the game - we will need to hide                                             
+				Time.timeScale = 0;                                                                  
+			}                                                                                        
+			else                                                                                     
+			{                                                                                        
+				// start the game back up - we're getting focus again                                
+				Time.timeScale = 1;                                                                  
+			}                                                                                        
+		} 
 	}
 }
